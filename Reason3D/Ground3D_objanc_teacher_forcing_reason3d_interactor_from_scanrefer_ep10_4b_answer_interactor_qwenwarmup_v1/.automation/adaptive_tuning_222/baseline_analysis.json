@@ -1,0 +1,158 @@
+{
+  "baseline_summary": "/home/huangxiang/codes/guiming/guiming_codes/research/Ground3D_objanc_teacher_forcing_reason3d_interactor_from_scanrefer_ep10_4b_answer_interactor_qwenwarmup_v1/evaluations/reason3d_answer_lm3_objce3_warmup3_joint10/epoch013_unconstrained_by_dataset/summary.json",
+  "rank_counts": {
+    "teacher": {
+      "scannet": 308,
+      "mp3d": 837
+    },
+    "generated": {
+      "scannet": 308,
+      "mp3d": 837
+    }
+  },
+  "unique_raw_samples": 1145,
+  "format_failures": 2,
+  "checkpoint_cpu_verified": {
+    "completed_epochs": 13,
+    "stage_epoch": 10,
+    "step": 2184,
+    "task_tensors": 1043,
+    "rank_buffers": 4,
+    "cuda_initialized": false
+  },
+  "normal_end_evidence": "No pipeline/torchrun/workers remain; final checkpoint saved; all rank payloads and summaries complete; evaluation log ends with full JSON and no traceback. Original user-started pipeline had no persistent exit-code file.",
+  "comparison": {
+    "all": {
+      "current": {
+        "obj/selected_iou": 0.30330988603673814,
+        "obj/selected_acc@0.25": 0.42969432314410483,
+        "obj/selected_acc@0.50": 0.31615720524017465,
+        "obj/oracle_iou": 0.5334630557366924,
+        "obj/top5_oracle_iou": 0.36975715251428326,
+        "obj/tie_aware_best_query_top1_rate": 0.2165938864628821,
+        "obj_phrase_accuracy": 0.4393013100436681,
+        "teacher_iou": 0.34837783713033016
+      },
+      "previous_interactor": {
+        "obj/selected_iou": 0.27639054862422563,
+        "obj/selected_acc@0.25": 0.388646288209607,
+        "obj/selected_acc@0.50": 0.28908296943231443,
+        "obj/oracle_iou": 0.5718024594258231,
+        "obj/top5_oracle_iou": 0.36126466090443016,
+        "obj/tie_aware_best_query_top1_rate": 0.1615720524017467,
+        "obj_phrase_accuracy": 0.4104803493449782,
+        "teacher_iou": 0.31990307234652776
+      }
+    },
+    "scannet": {
+      "current": {
+        "obj/selected_iou": 0.3835922630243729,
+        "obj/selected_acc@0.25": 0.4967532467532468,
+        "obj/selected_acc@0.50": 0.40584415584415584,
+        "obj/oracle_iou": 0.6315784249280869,
+        "obj/top5_oracle_iou": 0.4491694021808262,
+        "obj/tie_aware_best_query_top1_rate": 0.2597402597402597,
+        "obj_phrase_accuracy": 0.7175324675324676,
+        "teacher_iou": 0.42700961886530187
+      },
+      "previous_interactor": {
+        "obj/selected_iou": 0.32994073930244844,
+        "obj/selected_acc@0.25": 0.4448051948051948,
+        "obj/selected_acc@0.50": 0.34415584415584416,
+        "obj/oracle_iou": 0.6469845859101042,
+        "obj/top5_oracle_iou": 0.4010350631350385,
+        "obj/tie_aware_best_query_top1_rate": 0.21428571428571427,
+        "obj_phrase_accuracy": 0.6006493506493507,
+        "teacher_iou": 0.3892471242307492
+      }
+    },
+    "mp3d": {
+      "current": {
+        "obj/selected_iou": 0.27376750597438265,
+        "obj/selected_acc@0.25": 0.4050179211469534,
+        "obj/selected_acc@0.50": 0.2831541218637993,
+        "obj/oracle_iou": 0.4973584754368721,
+        "obj/top5_oracle_iou": 0.34053496267283134,
+        "obj/tie_aware_best_query_top1_rate": 0.2007168458781362,
+        "obj_phrase_accuracy": 0.33691756272401435,
+        "teacher_iou": 0.3194428445683573
+      },
+      "previous_interactor": {
+        "obj/selected_iou": 0.2566851021141986,
+        "obj/selected_acc@0.25": 0.36798088410991636,
+        "obj/selected_acc@0.50": 0.26881720430107525,
+        "obj/oracle_iou": 0.5441368740528738,
+        "obj/top5_oracle_iou": 0.3466299131302039,
+        "obj/tie_aware_best_query_top1_rate": 0.14217443249701314,
+        "obj_phrase_accuracy": 0.34050179211469533,
+        "teacher_iou": 0.29438578682640804
+      }
+    }
+  },
+  "logged_training_means_not_epoch_averages": {
+    "3": {
+      "logged_records": 17,
+      "means": {
+        "answer_lm": 0.47350576782927795,
+        "answer_obj_ce": 1.7874332576004022,
+        "answer_obj_token_accuracy": 0.5882352941176471,
+        "span": 0.0,
+        "mask_bce": 0.0,
+        "dice": 0.0,
+        "aux": 0.0,
+        "ranking": 0.0
+      }
+    },
+    "8": {
+      "logged_records": 17,
+      "means": {
+        "answer_lm": 0.11714158776928396,
+        "answer_obj_ce": 0.00794712480958825,
+        "answer_obj_token_accuracy": 1.0,
+        "span": 0.2546507083975217,
+        "mask_bce": 0.061650583808145976,
+        "dice": 0.2110903228030485,
+        "aux": 21.849344646229465,
+        "ranking": 3.4370335042476654
+      }
+    },
+    "13": {
+      "logged_records": 17,
+      "means": {
+        "answer_lm": 0.04002769395489903,
+        "answer_obj_ce": 0.006166930157044536,
+        "answer_obj_token_accuracy": 1.0,
+        "span": 0.1457282414262676,
+        "mask_bce": 0.056770359733491205,
+        "dice": 0.21079555679770076,
+        "aux": 17.590285132913028,
+        "ranking": 2.4681885423248304
+      }
+    }
+  },
+  "next_run_id": "auto_tune_001_20261024_0329",
+  "proposed_changes": {
+    "loss.aux_weight": [
+      0.5,
+      0.1
+    ],
+    "ranking.weight": [
+      0.5,
+      1.5
+    ],
+    "training.adapter_lr": [
+      0.0001,
+      5e-05
+    ],
+    "training.decoder_lr": [
+      0.0001,
+      5e-05
+    ]
+  },
+  "hypothesis": "Preserve improved language/Interactor alignment while reducing dominant auxiliary supervision and decoder/adapter update size; strengthen existing ranking to improve candidate selection. Combined ablation, no isolated causal attribution.",
+  "limits": [
+    "Single seed and validation-driven development; not independent-test SOTA.",
+    "Candidate oracle is lower despite improved selected IoU; cannot infer candidate overfitting from one final checkpoint.",
+    "MP3D OBJ exact is essentially unchanged/slightly lower versus old Interactor despite selected IoU improving."
+  ]
+}

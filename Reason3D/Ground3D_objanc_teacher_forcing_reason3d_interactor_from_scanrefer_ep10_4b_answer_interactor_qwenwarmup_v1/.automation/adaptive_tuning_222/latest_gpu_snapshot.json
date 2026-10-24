@@ -1,0 +1,79 @@
+{
+  "observed_utc": "2026-10-24T00:04:29.375235+00:00",
+  "gpus": [
+    {
+      "physical_id": 0,
+      "uuid": "GPU-efff577f-ab56-39d2-a744-59ba9df4e9c9",
+      "used_mib": 4826,
+      "free_mib": 19301,
+      "utilization": 89,
+      "has_compute_app": true,
+      "eligible": false
+    },
+    {
+      "physical_id": 1,
+      "uuid": "GPU-d954b2b2-69f5-4679-1ce8-7b72928cc59f",
+      "used_mib": 4830,
+      "free_mib": 19297,
+      "utilization": 96,
+      "has_compute_app": true,
+      "eligible": false
+    },
+    {
+      "physical_id": 2,
+      "uuid": "GPU-c4ab4d19-130d-b525-5545-50f6bc89dd49",
+      "used_mib": 4826,
+      "free_mib": 19301,
+      "utilization": 0,
+      "has_compute_app": true,
+      "eligible": false
+    },
+    {
+      "physical_id": 3,
+      "uuid": "GPU-4a019758-07ad-c770-e9f8-bae7380b4e33",
+      "used_mib": 4846,
+      "free_mib": 19281,
+      "utilization": 0,
+      "has_compute_app": true,
+      "eligible": false
+    },
+    {
+      "physical_id": 4,
+      "uuid": "GPU-b1b34cce-2a79-aa20-481b-2aacbfb21244",
+      "used_mib": 4822,
+      "free_mib": 19305,
+      "utilization": 88,
+      "has_compute_app": true,
+      "eligible": false
+    },
+    {
+      "physical_id": 5,
+      "uuid": "GPU-844ad458-62bc-8c9e-04c6-5550a15cfc9b",
+      "used_mib": 4824,
+      "free_mib": 19303,
+      "utilization": 91,
+      "has_compute_app": true,
+      "eligible": false
+    },
+    {
+      "physical_id": 6,
+      "uuid": "GPU-2355f912-548e-f023-23ad-ee659e78c5d2",
+      "used_mib": 4844,
+      "free_mib": 19283,
+      "utilization": 64,
+      "has_compute_app": true,
+      "eligible": false
+    },
+    {
+      "physical_id": 7,
+      "uuid": "GPU-1450e829-d77a-8d49-5288-c7b522b68c9b",
+      "used_mib": 4824,
+      "free_mib": 19303,
+      "utilization": 94,
+      "has_compute_app": true,
+      "eligible": false
+    }
+  ],
+  "compute_apps": "GPU-efff577f-ab56-39d2-a744-59ba9df4e9c9, 15089, 4814\nGPU-d954b2b2-69f5-4679-1ce8-7b72928cc59f, 15090, 4818\nGPU-c4ab4d19-130d-b525-5545-50f6bc89dd49, 15091, 4814\nGPU-4a019758-07ad-c770-e9f8-bae7380b4e33, 15092, 4834\nGPU-b1b34cce-2a79-aa20-481b-2aacbfb21244, 15093, 4812\nGPU-844ad458-62bc-8c9e-04c6-5550a15cfc9b, 15094, 4814\nGPU-2355f912-548e-f023-23ad-ee659e78c5d2, 15095, 4834\nGPU-1450e829-d77a-8d49-5288-c7b522b68c9b, 15096, 4814\n",
+  "eligible_count": 0
+}

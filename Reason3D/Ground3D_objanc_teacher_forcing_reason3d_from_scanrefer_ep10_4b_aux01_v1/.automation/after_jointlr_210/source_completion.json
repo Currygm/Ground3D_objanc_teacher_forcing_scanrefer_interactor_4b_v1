@@ -1,0 +1,81 @@
+{
+  "source_summary": "/home/huangxiang/codes/guiming/guiming_codes/research/Ground3D_objanc_teacher_forcing_reason3d_from_scanrefer_ep10_4b_jointlr_warmup_v1/evaluations/reason3d_answer_lm3_objce3_warmup3_joint10/epoch013_unconstrained_by_dataset/summary.json",
+  "coverage": {
+    "overall": 1145,
+    "scannet": 308,
+    "mp3d": 837
+  },
+  "unique_raw_ids": 1145,
+  "checkpoint": "/home/huangxiang/codes/guiming/guiming_codes/research/Ground3D_objanc_teacher_forcing_reason3d_from_scanrefer_ep10_4b_jointlr_warmup_v1/outputs/reason3d_answer_lm3_objce3_warmup3_joint10/epoch_013_step_00002184.pt",
+  "checkpoint_size": 708646108,
+  "checkpoint_metadata": {
+    "completed_epochs": 13,
+    "step": 2184,
+    "stage_epoch": 10,
+    "objective": "ground3d_objanc_teacher_forcing_reason3d_from_scanrefer_ep10_4b_jointlr_warmup_v1",
+    "config_matches": true
+  },
+  "gpu_checks": [
+    [
+      [
+        "1",
+        "GPU-f030f813-78c9-3f51-1115-b1d952d97d73",
+        "7",
+        "24120",
+        "0"
+      ],
+      [
+        "3",
+        "GPU-52d76b51-7e99-43af-9a82-07f6e564b429",
+        "5",
+        "24122",
+        "0"
+      ],
+      [
+        "4",
+        "GPU-bf561aae-6cf7-d0f1-f2c8-8c8856ffd869",
+        "7",
+        "24120",
+        "0"
+      ],
+      [
+        "6",
+        "GPU-e5773a18-3879-3c24-91f4-dabc12f9fbfe",
+        "5",
+        "24122",
+        "0"
+      ]
+    ],
+    [
+      [
+        "1",
+        "GPU-f030f813-78c9-3f51-1115-b1d952d97d73",
+        "7",
+        "24120",
+        "0"
+      ],
+      [
+        "3",
+        "GPU-52d76b51-7e99-43af-9a82-07f6e564b429",
+        "5",
+        "24122",
+        "0"
+      ],
+      [
+        "4",
+        "GPU-bf561aae-6cf7-d0f1-f2c8-8c8856ffd869",
+        "7",
+        "24120",
+        "0"
+      ],
+      [
+        "6",
+        "GPU-e5773a18-3879-3c24-91f4-dabc12f9fbfe",
+        "5",
+        "24122",
+        "0"
+      ]
+    ]
+  ],
+  "source_strict_raw_miou": 0.28169116421973645
+}

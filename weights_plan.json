@@ -1,0 +1,170 @@
+[
+  {
+    "path": "Reason3D/Ground3D_objanc_teacher_forcing_reason3d_from_scanrefer_ep10_4b_aux01_v1/outputs/reason3d_answer_lm3_objce3_warmup3_joint10/epoch_013_step_00002184.pt",
+    "size": 708645788
+  },
+  {
+    "path": "Reason3D/Ground3D_objanc_teacher_forcing_reason3d_from_scanrefer_ep10_4b_jointlr_warmup_v1/outputs/reason3d_answer_lm3_objce3_warmup3_joint10/epoch_013_step_00002184.pt",
+    "size": 708646108
+  },
+  {
+    "path": "Reason3D/Ground3D_objanc_teacher_forcing_reason3d_from_scanrefer_ep10_4b_qwenlr1e4_v1/outputs/reason3d_answer_lm3_objce3_warmup3_joint15/epoch_018_step_00003024.pt",
+    "size": 708646044
+  },
+  {
+    "path": "Reason3D/Ground3D_objanc_teacher_forcing_reason3d_from_scanrefer_ep10_4b_v1/outputs/reason3d_answer_lm3_objce3_warmup3_joint10/epoch_013_step_00002184.pt",
+    "size": 708645724
+  },
+  {
+    "path": "Reason3D/Ground3D_objanc_teacher_forcing_reason3d_from_scanrefer_ep10_4b_visfrozen_qwenlr1e4_v1/outputs/reason3d_answer_lm3_objce3_warmup3_joint10/epoch_013_step_00002184.pt",
+    "size": 614443940
+  },
+  {
+    "path": "Reason3D/Ground3D_objanc_teacher_forcing_reason3d_interactor_from_scanrefer_ep10_4b_answer_interactor_qwenwarmup_v1/outputs/auto_tune_001_20261024_0329_retry1/epoch_013_step_00002184.pt",
+    "size": 1501902104
+  },
+  {
+    "path": "Reason3D/Ground3D_objanc_teacher_forcing_reason3d_interactor_from_scanrefer_ep10_4b_answer_interactor_qwenwarmup_v1/outputs/reason3d_answer_lm3_objce3_warmup3_joint10/epoch_013_step_00002184.pt",
+    "size": 1501902104
+  },
+  {
+    "path": "Reason3D/Ground3D_objanc_teacher_forcing_reason3d_interactor_from_scanrefer_ep10_4b_split_adapter_lr_v1/outputs/reason3d_answer_lm3_objce3_warmup3_joint10/epoch_013_step_00002184.pt",
+    "size": 1501902296
+  },
+  {
+    "path": "Reason3D/Ground3D_objanc_teacher_forcing_reason3d_interactor_from_scanrefer_ep10_4b_split_adapter_lr_v1/outputs/reason3d_decoder1e4_visadapter5e5_warmup3_joint10/epoch_013_step_00002184.pt",
+    "size": 1501902296
+  },
+  {
+    "path": "Reason3D/Ground3D_objanc_teacher_forcing_reason3d_interactor_from_scanrefer_ep10_4b_v1/outputs/reason3d_answer_lm3_objce3_warmup3_joint10/epoch_013_step_00002184.pt",
+    "size": 1501901912
+  },
+  {
+    "path": "ScanRefer/Ground3D_objanc_teacher_forcing_scanrefer_4b_v1/outputs/open_answer/epoch_003_step_00013716.pt",
+    "size": 289181262
+  },
+  {
+    "path": "ScanRefer/Ground3D_objanc_teacher_forcing_scanrefer_4b_v1/outputs/scanrefer_teacher_forcing_univlg9/epoch_010_step_00045720.pt",
+    "size": 708648412
+  },
+  {
+    "path": "ScanRefer/Ground3D_objanc_teacher_forcing_scanrefer_interactor_4b_v1/outputs/open_answer/epoch_003_step_00013716.pt",
+    "size": 1090749938
+  },
+  {
+    "path": "ScanRefer/Ground3D_objanc_teacher_forcing_scanrefer_interactor_4b_v1/outputs/scanrefer_teacher_forcing_univlg9/epoch_010_step_00045720.pt",
+    "size": 1501549336
+  },
+  {
+    "path": "ScanRefer/Ground3D_objanc_teacher_forcing_scanrefer_interactor_4b_v1/outputs/scanrefer_teacher_forcing_univlg9/epoch_015_step_00068580.pt",
+    "size": 1501549336
+  },
+  {
+    "path": "ScanRefer/Ground3D_objanc_teacher_forcing_scanrefer_interactor_4b_v1/outputs/scanrefer_teacher_forcing_univlg9/epoch_016_step_00073152.pt",
+    "size": 1501549336
+  },
+  {
+    "path": "shared/qwen3_vl_4b/generation_config.json",
+    "size": 269
+  },
+  {
+    "path": "shared/qwen3_vl_4b/vocab.json",
+    "size": 2776833
+  },
+  {
+    "path": "shared/qwen3_vl_4b/config.json",
+    "size": 1505
+  },
+  {
+    "path": "shared/qwen3_vl_4b/download_manifest.json",
+    "size": 3456
+  },
+  {
+    "path": "shared/qwen3_vl_4b/metadata_files_manifest.json",
+    "size": 2089
+  },
+  {
+    "path": "shared/qwen3_vl_4b/model-00001-of-00002.safetensors",
+    "size": 4967229296
+  },
+  {
+    "path": "shared/qwen3_vl_4b/source_metadata.json",
+    "size": 17917
+  },
+  {
+    "path": "shared/qwen3_vl_4b/README.md",
+    "size": 7133
+  },
+  {
+    "path": "shared/qwen3_vl_4b/model.safetensors.index.json",
+    "size": 64742
+  },
+  {
+    "path": "shared/qwen3_vl_4b/preprocessor_config.json",
+    "size": 390
+  },
+  {
+    "path": "shared/qwen3_vl_4b/tokenizer.json",
+    "size": 7032403
+  },
+  {
+    "path": "shared/qwen3_vl_4b/video_preprocessor_config.json",
+    "size": 385
+  },
+  {
+    "path": "shared/qwen3_vl_4b/chat_template.json",
+    "size": 5502
+  },
+  {
+    "path": "shared/qwen3_vl_4b/merges.txt",
+    "size": 1671839
+  },
+  {
+    "path": "shared/qwen3_vl_4b/model-00002-of-00002.safetensors",
+    "size": 3908490048
+  },
+  {
+    "path": "shared/qwen3_vl_4b/tokenizer_config.json",
+    "size": 10868
+  },
+  {
+    "path": "shared/ground3d_3d/README.md",
+    "size": 1615
+  },
+  {
+    "path": "shared/ground3d_3d/download_manifest.json",
+    "size": 619
+  },
+  {
+    "path": "shared/ground3d_3d/pytorch_model.pth",
+    "size": 11749751630
+  },
+  {
+    "path": "shared/ground3d_3d/source_metadata.json",
+    "size": 2181
+  },
+  {
+    "path": "shared/bert-base-embedding/model.safetensors",
+    "size": 440449696
+  },
+  {
+    "path": "shared/bert-base-embedding/tokenizer.json",
+    "size": 466062
+  },
+  {
+    "path": "shared/bert-base-embedding/tokenizer_config.json",
+    "size": 28
+  },
+  {
+    "path": "shared/bert-base-embedding/vocab.txt",
+    "size": 231508
+  },
+  {
+    "path": "shared/bert-base-embedding/asset_manifest.json",
+    "size": 739
+  },
+  {
+    "path": "shared/bert-base-embedding/config.json",
+    "size": 570
+  }
+]

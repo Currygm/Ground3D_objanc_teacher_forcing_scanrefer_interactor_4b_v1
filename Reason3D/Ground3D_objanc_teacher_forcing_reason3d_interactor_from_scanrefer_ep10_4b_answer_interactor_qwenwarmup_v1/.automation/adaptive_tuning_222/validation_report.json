@@ -1,0 +1,17 @@
+{
+  "cpu_tests": 79,
+  "exit_code": 0,
+  "seconds": 42.47,
+  "log": "/home/huangxiang/codes/guiming/guiming_codes/research/Ground3D_objanc_teacher_forcing_reason3d_interactor_from_scanrefer_ep10_4b_answer_interactor_qwenwarmup_v1/.automation/adaptive_tuning_222/config_full.log",
+  "red_evidence": "/home/huangxiang/codes/guiming/guiming_codes/research/Ground3D_objanc_teacher_forcing_reason3d_interactor_from_scanrefer_ep10_4b_answer_interactor_qwenwarmup_v1/.automation/adaptive_tuning_222/config_red.log",
+  "tuned_config_load_and_parent_signature_check": "passed",
+  "bash_n_all_scripts": "passed",
+  "modified_python_ast": "passed",
+  "hashes": {
+    "reason3d_runtime.py": "db8b3f0be9b1e9ce182124df9d722b2926dda9fccbcf3bfa55ef8120e940ff1f",
+    "reason3d_tuning_validation.py": "181cd3bb090f1323a11c0e13fdce1ce5509cd513af3075df3346b7c2211f9253",
+    "tests/test_adaptive_tuning_config.py": "06f71e0a28a9522f5997256d579f8baf534e2b756c90dbe08f0a8ee6775291f0"
+  },
+  "existing_resume_and_evaluation_regressions": "passed",
+  "gpu_training_or_evaluation_launched": false
+}

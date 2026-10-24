@@ -1,0 +1,145 @@
+{
+  "automation_id": "222-reason3d",
+  "phase": "ready_waiting_for_gpus",
+  "node": "gpu-222",
+  "project": "/home/huangxiang/codes/guiming/guiming_codes/research/Ground3D_objanc_teacher_forcing_reason3d_interactor_from_scanrefer_ep10_4b_answer_interactor_qwenwarmup_v1",
+  "interval_minutes": 90,
+  "baseline_config": "/home/huangxiang/codes/guiming/guiming_codes/research/Ground3D_objanc_teacher_forcing_reason3d_interactor_from_scanrefer_ep10_4b_answer_interactor_qwenwarmup_v1/configs/reason3d_answer_lm3_objce3_warmup3_joint10.yaml",
+  "baseline_config_sha256": "8a709ff1aaec44a89b82a6f421be2bf954013fe78a925aa36855682c55d109cf",
+  "initial_training_pid_hint": 30948,
+  "initial_pipeline_pid_hint": 30921,
+  "initial_pid_hint_only": true,
+  "validation_extension": {
+    "explicitly_authorized": true,
+    "completed": true,
+    "defer_until_baseline_pipeline_finished": true,
+    "validation_report": "/home/huangxiang/codes/guiming/guiming_codes/research/Ground3D_objanc_teacher_forcing_reason3d_interactor_from_scanrefer_ep10_4b_answer_interactor_qwenwarmup_v1/.automation/adaptive_tuning_222/validation_report.json",
+    "changed_file_hashes": {
+      "reason3d_runtime.py": "db8b3f0be9b1e9ce182124df9d722b2926dda9fccbcf3bfa55ef8120e940ff1f",
+      "reason3d_tuning_validation.py": "181cd3bb090f1323a11c0e13fdce1ce5509cd513af3075df3346b7c2211f9253",
+      "tests/test_adaptive_tuning_config.py": "06f71e0a28a9522f5997256d579f8baf534e2b756c90dbe08f0a8ee6775291f0"
+    }
+  },
+  "active_run_id": null,
+  "attempts": [],
+  "created_utc": "2026-10-23T16:34:04.558685+00:00",
+  "last_check": {
+    "heartbeat_time_utc": "2026-10-24T00:04:01.202Z",
+    "observed_utc": "2026-10-24T00:04:29.375235+00:00",
+    "eligible_gpus": 0,
+    "pending_config_hash_verified": true,
+    "validation_code_hashes_verified": true,
+    "existing_project_training_or_eval_processes": false,
+    "new_gpu_job_submitted": false,
+    "decision": "All eight GPUs remain occupied by other compute apps; keep the same validated candidate queued. No new result, configuration, or submission."
+  },
+  "baseline_completed": true,
+  "baseline_analysis": "/home/huangxiang/codes/guiming/guiming_codes/research/Ground3D_objanc_teacher_forcing_reason3d_interactor_from_scanrefer_ep10_4b_answer_interactor_qwenwarmup_v1/.automation/adaptive_tuning_222/baseline_analysis.json",
+  "baseline_verified_checkpoint": {
+    "completed_epochs": 13,
+    "stage_epoch": 10,
+    "step": 2184
+  },
+  "pending_run": {
+    "run_id": "auto_tune_001_20261024_0329",
+    "configuration": "/home/huangxiang/codes/guiming/guiming_codes/research/Ground3D_objanc_teacher_forcing_reason3d_interactor_from_scanrefer_ep10_4b_answer_interactor_qwenwarmup_v1/configs/auto_tune_001_20261024_0329.yaml",
+    "config_sha256": "bbc608b5951d62e5aacf435220160de625003a3f184ecceae42b63911af5ec12",
+    "parent_config": "/home/huangxiang/codes/guiming/guiming_codes/research/Ground3D_objanc_teacher_forcing_reason3d_interactor_from_scanrefer_ep10_4b_answer_interactor_qwenwarmup_v1/configs/reason3d_answer_lm3_objce3_warmup3_joint10.yaml",
+    "output": "/home/huangxiang/codes/guiming/guiming_codes/research/Ground3D_objanc_teacher_forcing_reason3d_interactor_from_scanrefer_ep10_4b_answer_interactor_qwenwarmup_v1/outputs/auto_tune_001_20261024_0329",
+    "evaluation_output": "/home/huangxiang/codes/guiming/guiming_codes/research/Ground3D_objanc_teacher_forcing_reason3d_interactor_from_scanrefer_ep10_4b_answer_interactor_qwenwarmup_v1/evaluations/auto_tune_001_20261024_0329/epoch013_unconstrained_by_dataset",
+    "changed_scalars": {
+      "loss.aux_weight": [
+        0.5,
+        0.1
+      ],
+      "ranking.weight": [
+        0.5,
+        1.5
+      ],
+      "training.adapter_lr": [
+        0.0001,
+        5e-05
+      ],
+      "training.decoder_lr": [
+        0.0001,
+        5e-05
+      ]
+    },
+    "status": "ready_waiting_for_gpus",
+    "command_template": "CONFIG=<configuration> OUTPUT_DIR=<output> EVAL_OUTPUT_DIR=<evaluation_output> GPU_IDS=<four GPU UUIDs> PYTHONUNBUFFERED=1 bash scripts/train_then_eval.sh",
+    "hypothesis_file": "/home/huangxiang/codes/guiming/guiming_codes/research/Ground3D_objanc_teacher_forcing_reason3d_interactor_from_scanrefer_ep10_4b_answer_interactor_qwenwarmup_v1/.automation/adaptive_tuning_222/baseline_analysis.json",
+    "cpu_validated": true
+  },
+  "next_action": "Keep the existing pending configuration. Select four GPUs on222 with memory.free >=20480MiB each, allowing other compute processes/utilization. Recheck after10s and before submission; preserve UUID pinning and idempotent launch. Fewer than4 qualified cards: wait.",
+  "gpu_selection_policy": {
+    "minimum_free_mib": 20480,
+    "allow_existing_compute_processes": true,
+    "utilization_cap": null,
+    "max_used_mib": null,
+    "required_gpu_count": 4,
+    "double_check_interval_seconds": 10,
+    "priority": "User update2026-10-24 supersedes prior completely-idle policy"
+  },
+  "gpu_policy_last_check": {
+    "observed_utc": "2026-10-24T00:44:55.149363+00:00",
+    "eligible_count": 0,
+    "gpus": [
+      {
+        "physical_id": 0,
+        "uuid": "GPU-efff577f-ab56-39d2-a744-59ba9df4e9c9",
+        "free_mib": 19301,
+        "utilization": 76,
+        "eligible": false
+      },
+      {
+        "physical_id": 1,
+        "uuid": "GPU-d954b2b2-69f5-4679-1ce8-7b72928cc59f",
+        "free_mib": 19297,
+        "utilization": 83,
+        "eligible": false
+      },
+      {
+        "physical_id": 2,
+        "uuid": "GPU-c4ab4d19-130d-b525-5545-50f6bc89dd49",
+        "free_mib": 19301,
+        "utilization": 55,
+        "eligible": false
+      },
+      {
+        "physical_id": 3,
+        "uuid": "GPU-4a019758-07ad-c770-e9f8-bae7380b4e33",
+        "free_mib": 19281,
+        "utilization": 42,
+        "eligible": false
+      },
+      {
+        "physical_id": 4,
+        "uuid": "GPU-b1b34cce-2a79-aa20-481b-2aacbfb21244",
+        "free_mib": 19303,
+        "utilization": 51,
+        "eligible": false
+      },
+      {
+        "physical_id": 5,
+        "uuid": "GPU-844ad458-62bc-8c9e-04c6-5550a15cfc9b",
+        "free_mib": 19303,
+        "utilization": 91,
+        "eligible": false
+      },
+      {
+        "physical_id": 6,
+        "uuid": "GPU-2355f912-548e-f023-23ad-ee659e78c5d2",
+        "free_mib": 19283,
+        "utilization": 59,
+        "eligible": false
+      },
+      {
+        "physical_id": 7,
+        "uuid": "GPU-1450e829-d77a-8d49-5288-c7b522b68c9b",
+        "free_mib": 19303,
+        "utilization": 67,
+        "eligible": false
+      }
+    ]
+  }
+}

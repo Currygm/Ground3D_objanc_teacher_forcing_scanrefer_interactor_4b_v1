@@ -1,0 +1,30 @@
+{
+  "run_id": "auto_tune_001_20261024_0329",
+  "configuration": "/home/huangxiang/codes/guiming/guiming_codes/research/Ground3D_objanc_teacher_forcing_reason3d_interactor_from_scanrefer_ep10_4b_answer_interactor_qwenwarmup_v1/configs/auto_tune_001_20261024_0329.yaml",
+  "config_sha256": "bbc608b5951d62e5aacf435220160de625003a3f184ecceae42b63911af5ec12",
+  "parent_config": "/home/huangxiang/codes/guiming/guiming_codes/research/Ground3D_objanc_teacher_forcing_reason3d_interactor_from_scanrefer_ep10_4b_answer_interactor_qwenwarmup_v1/configs/reason3d_answer_lm3_objce3_warmup3_joint10.yaml",
+  "output": "/home/huangxiang/codes/guiming/guiming_codes/research/Ground3D_objanc_teacher_forcing_reason3d_interactor_from_scanrefer_ep10_4b_answer_interactor_qwenwarmup_v1/outputs/auto_tune_001_20261024_0329",
+  "evaluation_output": "/home/huangxiang/codes/guiming/guiming_codes/research/Ground3D_objanc_teacher_forcing_reason3d_interactor_from_scanrefer_ep10_4b_answer_interactor_qwenwarmup_v1/evaluations/auto_tune_001_20261024_0329/epoch013_unconstrained_by_dataset",
+  "changed_scalars": {
+    "loss.aux_weight": [
+      0.5,
+      0.1
+    ],
+    "ranking.weight": [
+      0.5,
+      1.5
+    ],
+    "training.adapter_lr": [
+      0.0001,
+      5e-05
+    ],
+    "training.decoder_lr": [
+      0.0001,
+      5e-05
+    ]
+  },
+  "status": "ready_waiting_for_gpus",
+  "command_template": "CONFIG=<configuration> OUTPUT_DIR=<output> EVAL_OUTPUT_DIR=<evaluation_output> GPU_IDS=<four GPU UUIDs> PYTHONUNBUFFERED=1 bash scripts/train_then_eval.sh",
+  "hypothesis_file": "/home/huangxiang/codes/guiming/guiming_codes/research/Ground3D_objanc_teacher_forcing_reason3d_interactor_from_scanrefer_ep10_4b_answer_interactor_qwenwarmup_v1/.automation/adaptive_tuning_222/baseline_analysis.json",
+  "cpu_validated": true
+}

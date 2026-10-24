@@ -1,0 +1,825 @@
+{
+  "objective": "ground3d_objanc_teacher_forcing_scanrefer_interactor_4b_v1",
+  "format_version": 3,
+  "training_stage": "scanrefer_teacher_forcing_segmentation",
+  "completed_epochs": 10,
+  "step": 45720,
+  "architecture_signature": {
+    "objective": "ground3d_objanc_teacher_forcing_scanrefer_interactor_4b_v1",
+    "language_hidden_size": 2560,
+    "language_layers": 36,
+    "source_manifests": {
+      "qwen": {
+        "repo_id": "Qwen/Qwen3-VL-4B-Instruct",
+        "revision": "ebb281ec70b05090aa6165b016eac8ec08e71b17",
+        "files": {
+          "README.md": {
+            "size": 7133,
+            "sha256": "a884e5e78f7d6f7bfe237f909dbc41a126542e259dc79d8ab33cc8980580ff79",
+            "official_lfs_sha256": null,
+            "official_git_blob_sha1": "542417095b66d3fc13be22bbf6722928787b8ef4"
+          },
+          "chat_template.json": {
+            "size": 5502,
+            "sha256": "6f8a6a55027e3da5160105556cda5dd69f6423f1c32645f6730d32de7773d0c4",
+            "official_lfs_sha256": null,
+            "official_git_blob_sha1": "e49e75bdda104c8de941eb20e0b3765184fb27bc"
+          },
+          "config.json": {
+            "size": 1505,
+            "sha256": "edac7703329133edfc53e46ac0081835144c99d7eebf28b71c732694d435224d",
+            "official_lfs_sha256": null,
+            "official_git_blob_sha1": "22be8bb79043d39840ca5e70d7a2dab80311602c"
+          },
+          "generation_config.json": {
+            "size": 269,
+            "sha256": "8469742d1fce0de951c8909b26a2c0c0d8490837ce476efb114da9e0cefc4d44",
+            "official_lfs_sha256": null,
+            "official_git_blob_sha1": "e116347d7ef42621c7a5957f82c015c38d939c1f"
+          },
+          "merges.txt": {
+            "size": 1671839,
+            "sha256": "599bab54075088774b1733fde865d5bd747cbcc7a547c5bc12610e874e26f5e3",
+            "official_lfs_sha256": null,
+            "official_git_blob_sha1": "20024bfe7c83998e9aeaf98a0cd6a2ce6306c2f0"
+          },
+          "model-00001-of-00002.safetensors": {
+            "size": 4967229296,
+            "sha256": "30a01a0556622645a3cce87b655bbbbbc1f170c196099f1b666c93202c3339a9",
+            "official_lfs_sha256": "30a01a0556622645a3cce87b655bbbbbc1f170c196099f1b666c93202c3339a9"
+          },
+          "model-00002-of-00002.safetensors": {
+            "size": 3908490048,
+            "sha256": "046296a2a387efb43b0c997d5833c789604d168834f6e0d3064bf7bb13d002a6",
+            "official_lfs_sha256": "046296a2a387efb43b0c997d5833c789604d168834f6e0d3064bf7bb13d002a6"
+          },
+          "model.safetensors.index.json": {
+            "size": 64742,
+            "sha256": "58a7841d7bff2548dd91577d216274a83cf1b500bc6a534b809d6c1b1707cf2b",
+            "official_lfs_sha256": null,
+            "official_git_blob_sha1": "3b52de97496e2f4501dfa92a87642f60db3e22a1"
+          },
+          "preprocessor_config.json": {
+            "size": 390,
+            "sha256": "27225450ac9c6529872ee1924fcb0962ff5634834f817040f444118116f4e516",
+            "official_lfs_sha256": null,
+            "official_git_blob_sha1": "2ea84a437d448ff71b08df68fdd949d5cc4ebb64"
+          },
+          "tokenizer.json": {
+            "size": 7032403,
+            "sha256": "a5d85b6dcc535e6b93115a9ef287e6132fdbf30270da6218194ba742261173c7",
+            "official_lfs_sha256": null,
+            "official_git_blob_sha1": "c6cc1014128b19d1fc46b1d30a23e3b1d35db421"
+          },
+          "tokenizer_config.json": {
+            "size": 10868,
+            "sha256": "c2da771801886ad9ae98181793ffd3dfb7f1af30f6f7c6a4e15d7dbba52e2399",
+            "official_lfs_sha256": null,
+            "official_git_blob_sha1": "d3d3763207692c78780f4bf42d4dadf49a5c8012"
+          },
+          "video_preprocessor_config.json": {
+            "size": 385,
+            "sha256": "7768af27c1fafa9cc9011c1dc20067e03f8915e03b63504550e11d5066986d13",
+            "official_lfs_sha256": null,
+            "official_git_blob_sha1": "3ba673a5ad7d4d13f54155ecd38b2a94a6dac8fe"
+          },
+          "vocab.json": {
+            "size": 2776833,
+            "sha256": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+            "official_lfs_sha256": null,
+            "official_git_blob_sha1": "4783fe10ac3adce15ac8f358ef5462739852c569"
+          }
+        }
+      },
+      "ground3d": {
+        "repo_id": "amolharsh/Ground3D-LMM-4B-3D",
+        "revision": "d9c1260cf945dae333fd87c994e734419e189f00",
+        "files": {
+          "README.md": {
+            "size": 1615,
+            "sha256": "9f8a2c124af35feb3095ee97dd89cb122b1bf4e85072d7847991a01e7e4e8c07",
+            "official_lfs_sha256": null,
+            "official_git_blob_sha1": "e329b2c84809e768f7ee8a6e3750a40aa2e1d997"
+          },
+          "pytorch_model.pth": {
+            "size": 11749751630,
+            "sha256": "cc7c379567b609d5e9dfc9001c8d6ec2ad1a252d99d3d38b6d1f27cd4f92bc69",
+            "official_lfs_sha256": "cc7c379567b609d5e9dfc9001c8d6ec2ad1a252d99d3d38b6d1f27cd4f92bc69"
+          }
+        }
+      }
+    },
+    "qwen_lora": {
+      "r": 32,
+      "alpha": 64,
+      "dropout": 0.1,
+      "bias": "none",
+      "target_modules": [
+        "q_proj",
+        "k_proj",
+        "v_proj",
+        "o_proj",
+        "attn.qkv",
+        "attn.proj"
+      ]
+    },
+    "tokenizer_sha256": "8863970dbf5504121d67bab7b870eb2c3a2a68af37a8ec43ad6e2de0322d4216",
+    "token_ids": {
+      "<obj>": 151669,
+      "</obj>": 151670,
+      "<anc>": 151671,
+      "</anc>": 151675
+    },
+    "token_migration": {
+      "<p>": "<obj>",
+      "</p>": "</obj>",
+      "<SEG>": "<anc>",
+      "</anc>": "copy </obj>"
+    },
+    "answer_protocol": {
+      "system_prompt": "Answer the 3D grounding question briefly and naturally. Mark exactly one target noun phrase with <obj>...</obj>. Mark each useful reference instance with <anc>...</anc>. Do not nest tags.",
+      "user_prefix": "Identify the requested object and any useful anchor objects: ",
+      "structured_tokens": [
+        "<obj>",
+        "</obj>",
+        "<anc>",
+        "</anc>"
+      ],
+      "generation": {
+        "constrained": true,
+        "greedy": true,
+        "max_phrase_tokens": 32,
+        "max_new_tokens": 128
+      }
+    },
+    "interactor": {
+      "implementation": "ground3d_full_superpoint_query_only_v1",
+      "queries": 32,
+      "interactor_text_input": false,
+      "frozen_text_parameters": [
+        "qformer.embeddings.position_embeddings.weight",
+        "qformer.embeddings.word_embeddings.weight",
+        "qformer.encoder.layer.0.intermediate.dense.bias",
+        "qformer.encoder.layer.0.intermediate.dense.weight",
+        "qformer.encoder.layer.0.output.LayerNorm.bias",
+        "qformer.encoder.layer.0.output.LayerNorm.weight",
+        "qformer.encoder.layer.0.output.dense.bias",
+        "qformer.encoder.layer.0.output.dense.weight",
+        "qformer.encoder.layer.1.intermediate.dense.bias",
+        "qformer.encoder.layer.1.intermediate.dense.weight",
+        "qformer.encoder.layer.1.output.LayerNorm.bias",
+        "qformer.encoder.layer.1.output.LayerNorm.weight",
+        "qformer.encoder.layer.1.output.dense.bias",
+        "qformer.encoder.layer.1.output.dense.weight",
+        "qformer.encoder.layer.2.intermediate.dense.bias",
+        "qformer.encoder.layer.2.intermediate.dense.weight",
+        "qformer.encoder.layer.2.output.LayerNorm.bias",
+        "qformer.encoder.layer.2.output.LayerNorm.weight",
+        "qformer.encoder.layer.2.output.dense.bias",
+        "qformer.encoder.layer.2.output.dense.weight",
+        "qformer.encoder.layer.3.intermediate.dense.bias",
+        "qformer.encoder.layer.3.intermediate.dense.weight",
+        "qformer.encoder.layer.3.output.LayerNorm.bias",
+        "qformer.encoder.layer.3.output.LayerNorm.weight",
+        "qformer.encoder.layer.3.output.dense.bias",
+        "qformer.encoder.layer.3.output.dense.weight",
+        "qformer.encoder.layer.4.intermediate.dense.bias",
+        "qformer.encoder.layer.4.intermediate.dense.weight",
+        "qformer.encoder.layer.4.output.LayerNorm.bias",
+        "qformer.encoder.layer.4.output.LayerNorm.weight",
+        "qformer.encoder.layer.4.output.dense.bias",
+        "qformer.encoder.layer.4.output.dense.weight",
+        "qformer.encoder.layer.5.intermediate.dense.bias",
+        "qformer.encoder.layer.5.intermediate.dense.weight",
+        "qformer.encoder.layer.5.output.LayerNorm.bias",
+        "qformer.encoder.layer.5.output.LayerNorm.weight",
+        "qformer.encoder.layer.5.output.dense.bias",
+        "qformer.encoder.layer.5.output.dense.weight"
+      ],
+      "qformer": {
+        "vocab_size": 30522,
+        "hidden_size": 768,
+        "num_hidden_layers": 6,
+        "num_attention_heads": 12,
+        "intermediate_size": 3072,
+        "encoder_hidden_size": 256,
+        "cross_attention_frequency": 2,
+        "hidden_act": "gelu",
+        "hidden_dropout_prob": 0.1,
+        "attention_probs_dropout_prob": 0.1,
+        "max_position_embeddings": 512,
+        "initializer_range": 0.02,
+        "layer_norm_eps": 1e-12,
+        "pad_token_id": 0,
+        "position_embedding_type": "absolute"
+      },
+      "config": {
+        "text_input": false,
+        "num_queries": 32,
+        "language_hidden_size": 2560,
+        "asset_dir": "/home/huangxiang/codes/guiming/guiming_codes/research/SpatialLM_objanc_answer_only_causal_interactor_visual_only_scanrefer_05b_v1/models/bert-base-embedding"
+      },
+      "assets": {
+        "repo": "CH3COOK/bert-base-embedding",
+        "revision": "dad6c5c4bbc67801c70d59f8dfd6446925f07cc1",
+        "official_ll3da_revision": "ebbdd771b616ce3714932c3627d91ece6d8d6cd1",
+        "files": {
+          "config.json": "7160e1553ad2ca51d8c1cb066be533db31826e12d173824c1bb0cb1a4f187d20",
+          "model.safetensors": "2cf83467799040bad74bc71b81d3fe2bfbe06b166ca2d21b3cfc784124b27b18",
+          "tokenizer.json": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+          "tokenizer_config.json": "53b6f42b8b8daddbdc6d3532c324187a92b46c1602bd6e8d4ad5a413b4fc90e1",
+          "vocab.txt": "07eced375cec144d27c900241f3e339478dec958f92fddbc551f295c992038a3"
+        },
+        "official_model_sha256": "2cf83467799040bad74bc71b81d3fe2bfbe06b166ca2d21b3cfc784124b27b18",
+        "loaded_keys": [
+          "embeddings.layernorm.bias",
+          "embeddings.layernorm.weight",
+          "embeddings.position_embeddings.weight",
+          "embeddings.word_embeddings.weight"
+        ],
+        "excluded_keys": [
+          "bert.encoder.layer.0.attention.output.LayerNorm.beta",
+          "bert.encoder.layer.0.attention.output.LayerNorm.gamma",
+          "bert.encoder.layer.0.attention.output.dense.bias",
+          "bert.encoder.layer.0.attention.output.dense.weight",
+          "bert.encoder.layer.0.attention.self.key.bias",
+          "bert.encoder.layer.0.attention.self.key.weight",
+          "bert.encoder.layer.0.attention.self.query.bias",
+          "bert.encoder.layer.0.attention.self.query.weight",
+          "bert.encoder.layer.0.attention.self.value.bias",
+          "bert.encoder.layer.0.attention.self.value.weight",
+          "bert.encoder.layer.0.intermediate.dense.bias",
+          "bert.encoder.layer.0.intermediate.dense.weight",
+          "bert.encoder.layer.0.output.LayerNorm.beta",
+          "bert.encoder.layer.0.output.LayerNorm.gamma",
+          "bert.encoder.layer.0.output.dense.bias",
+          "bert.encoder.layer.0.output.dense.weight",
+          "bert.encoder.layer.1.attention.output.LayerNorm.beta",
+          "bert.encoder.layer.1.attention.output.LayerNorm.gamma",
+          "bert.encoder.layer.1.attention.output.dense.bias",
+          "bert.encoder.layer.1.attention.output.dense.weight",
+          "bert.encoder.layer.1.attention.self.key.bias",
+          "bert.encoder.layer.1.attention.self.key.weight",
+          "bert.encoder.layer.1.attention.self.query.bias",
+          "bert.encoder.layer.1.attention.self.query.weight",
+          "bert.encoder.layer.1.attention.self.value.bias",
+          "bert.encoder.layer.1.attention.self.value.weight",
+          "bert.encoder.layer.1.intermediate.dense.bias",
+          "bert.encoder.layer.1.intermediate.dense.weight",
+          "bert.encoder.layer.1.output.LayerNorm.beta",
+          "bert.encoder.layer.1.output.LayerNorm.gamma",
+          "bert.encoder.layer.1.output.dense.bias",
+          "bert.encoder.layer.1.output.dense.weight",
+          "bert.encoder.layer.10.attention.output.LayerNorm.beta",
+          "bert.encoder.layer.10.attention.output.LayerNorm.gamma",
+          "bert.encoder.layer.10.attention.output.dense.bias",
+          "bert.encoder.layer.10.attention.output.dense.weight",
+          "bert.encoder.layer.10.attention.self.key.bias",
+          "bert.encoder.layer.10.attention.self.key.weight",
+          "bert.encoder.layer.10.attention.self.query.bias",
+          "bert.encoder.layer.10.attention.self.query.weight",
+          "bert.encoder.layer.10.attention.self.value.bias",
+          "bert.encoder.layer.10.attention.self.value.weight",
+          "bert.encoder.layer.10.intermediate.dense.bias",
+          "bert.encoder.layer.10.intermediate.dense.weight",
+          "bert.encoder.layer.10.output.LayerNorm.beta",
+          "bert.encoder.layer.10.output.LayerNorm.gamma",
+          "bert.encoder.layer.10.output.dense.bias",
+          "bert.encoder.layer.10.output.dense.weight",
+          "bert.encoder.layer.11.attention.output.LayerNorm.beta",
+          "bert.encoder.layer.11.attention.output.LayerNorm.gamma",
+          "bert.encoder.layer.11.attention.output.dense.bias",
+          "bert.encoder.layer.11.attention.output.dense.weight",
+          "bert.encoder.layer.11.attention.self.key.bias",
+          "bert.encoder.layer.11.attention.self.key.weight",
+          "bert.encoder.layer.11.attention.self.query.bias",
+          "bert.encoder.layer.11.attention.self.query.weight",
+          "bert.encoder.layer.11.attention.self.value.bias",
+          "bert.encoder.layer.11.attention.self.value.weight",
+          "bert.encoder.layer.11.intermediate.dense.bias",
+          "bert.encoder.layer.11.intermediate.dense.weight",
+          "bert.encoder.layer.11.output.LayerNorm.beta",
+          "bert.encoder.layer.11.output.LayerNorm.gamma",
+          "bert.encoder.layer.11.output.dense.bias",
+          "bert.encoder.layer.11.output.dense.weight",
+          "bert.encoder.layer.2.attention.output.LayerNorm.beta",
+          "bert.encoder.layer.2.attention.output.LayerNorm.gamma",
+          "bert.encoder.layer.2.attention.output.dense.bias",
+          "bert.encoder.layer.2.attention.output.dense.weight",
+          "bert.encoder.layer.2.attention.self.key.bias",
+          "bert.encoder.layer.2.attention.self.key.weight",
+          "bert.encoder.layer.2.attention.self.query.bias",
+          "bert.encoder.layer.2.attention.self.query.weight",
+          "bert.encoder.layer.2.attention.self.value.bias",
+          "bert.encoder.layer.2.attention.self.value.weight",
+          "bert.encoder.layer.2.intermediate.dense.bias",
+          "bert.encoder.layer.2.intermediate.dense.weight",
+          "bert.encoder.layer.2.output.LayerNorm.beta",
+          "bert.encoder.layer.2.output.LayerNorm.gamma",
+          "bert.encoder.layer.2.output.dense.bias",
+          "bert.encoder.layer.2.output.dense.weight",
+          "bert.encoder.layer.3.attention.output.LayerNorm.beta",
+          "bert.encoder.layer.3.attention.output.LayerNorm.gamma",
+          "bert.encoder.layer.3.attention.output.dense.bias",
+          "bert.encoder.layer.3.attention.output.dense.weight",
+          "bert.encoder.layer.3.attention.self.key.bias",
+          "bert.encoder.layer.3.attention.self.key.weight",
+          "bert.encoder.layer.3.attention.self.query.bias",
+          "bert.encoder.layer.3.attention.self.query.weight",
+          "bert.encoder.layer.3.attention.self.value.bias",
+          "bert.encoder.layer.3.attention.self.value.weight",
+          "bert.encoder.layer.3.intermediate.dense.bias",
+          "bert.encoder.layer.3.intermediate.dense.weight",
+          "bert.encoder.layer.3.output.LayerNorm.beta",
+          "bert.encoder.layer.3.output.LayerNorm.gamma",
+          "bert.encoder.layer.3.output.dense.bias",
+          "bert.encoder.layer.3.output.dense.weight",
+          "bert.encoder.layer.4.attention.output.LayerNorm.beta",
+          "bert.encoder.layer.4.attention.output.LayerNorm.gamma",
+          "bert.encoder.layer.4.attention.output.dense.bias",
+          "bert.encoder.layer.4.attention.output.dense.weight",
+          "bert.encoder.layer.4.attention.self.key.bias",
+          "bert.encoder.layer.4.attention.self.key.weight",
+          "bert.encoder.layer.4.attention.self.query.bias",
+          "bert.encoder.layer.4.attention.self.query.weight",
+          "bert.encoder.layer.4.attention.self.value.bias",
+          "bert.encoder.layer.4.attention.self.value.weight",
+          "bert.encoder.layer.4.intermediate.dense.bias",
+          "bert.encoder.layer.4.intermediate.dense.weight",
+          "bert.encoder.layer.4.output.LayerNorm.beta",
+          "bert.encoder.layer.4.output.LayerNorm.gamma",
+          "bert.encoder.layer.4.output.dense.bias",
+          "bert.encoder.layer.4.output.dense.weight",
+          "bert.encoder.layer.5.attention.output.LayerNorm.beta",
+          "bert.encoder.layer.5.attention.output.LayerNorm.gamma",
+          "bert.encoder.layer.5.attention.output.dense.bias",
+          "bert.encoder.layer.5.attention.output.dense.weight",
+          "bert.encoder.layer.5.attention.self.key.bias",
+          "bert.encoder.layer.5.attention.self.key.weight",
+          "bert.encoder.layer.5.attention.self.query.bias",
+          "bert.encoder.layer.5.attention.self.query.weight",
+          "bert.encoder.layer.5.attention.self.value.bias",
+          "bert.encoder.layer.5.attention.self.value.weight",
+          "bert.encoder.layer.5.intermediate.dense.bias",
+          "bert.encoder.layer.5.intermediate.dense.weight",
+          "bert.encoder.layer.5.output.LayerNorm.beta",
+          "bert.encoder.layer.5.output.LayerNorm.gamma",
+          "bert.encoder.layer.5.output.dense.bias",
+          "bert.encoder.layer.5.output.dense.weight",
+          "bert.encoder.layer.6.attention.output.LayerNorm.beta",
+          "bert.encoder.layer.6.attention.output.LayerNorm.gamma",
+          "bert.encoder.layer.6.attention.output.dense.bias",
+          "bert.encoder.layer.6.attention.output.dense.weight",
+          "bert.encoder.layer.6.attention.self.key.bias",
+          "bert.encoder.layer.6.attention.self.key.weight",
+          "bert.encoder.layer.6.attention.self.query.bias",
+          "bert.encoder.layer.6.attention.self.query.weight",
+          "bert.encoder.layer.6.attention.self.value.bias",
+          "bert.encoder.layer.6.attention.self.value.weight",
+          "bert.encoder.layer.6.intermediate.dense.bias",
+          "bert.encoder.layer.6.intermediate.dense.weight",
+          "bert.encoder.layer.6.output.LayerNorm.beta",
+          "bert.encoder.layer.6.output.LayerNorm.gamma",
+          "bert.encoder.layer.6.output.dense.bias",
+          "bert.encoder.layer.6.output.dense.weight",
+          "bert.encoder.layer.7.attention.output.LayerNorm.beta",
+          "bert.encoder.layer.7.attention.output.LayerNorm.gamma",
+          "bert.encoder.layer.7.attention.output.dense.bias",
+          "bert.encoder.layer.7.attention.output.dense.weight",
+          "bert.encoder.layer.7.attention.self.key.bias",
+          "bert.encoder.layer.7.attention.self.key.weight",
+          "bert.encoder.layer.7.attention.self.query.bias",
+          "bert.encoder.layer.7.attention.self.query.weight",
+          "bert.encoder.layer.7.attention.self.value.bias",
+          "bert.encoder.layer.7.attention.self.value.weight",
+          "bert.encoder.layer.7.intermediate.dense.bias",
+          "bert.encoder.layer.7.intermediate.dense.weight",
+          "bert.encoder.layer.7.output.LayerNorm.beta",
+          "bert.encoder.layer.7.output.LayerNorm.gamma",
+          "bert.encoder.layer.7.output.dense.bias",
+          "bert.encoder.layer.7.output.dense.weight",
+          "bert.encoder.layer.8.attention.output.LayerNorm.beta",
+          "bert.encoder.layer.8.attention.output.LayerNorm.gamma",
+          "bert.encoder.layer.8.attention.output.dense.bias",
+          "bert.encoder.layer.8.attention.output.dense.weight",
+          "bert.encoder.layer.8.attention.self.key.bias",
+          "bert.encoder.layer.8.attention.self.key.weight",
+          "bert.encoder.layer.8.attention.self.query.bias",
+          "bert.encoder.layer.8.attention.self.query.weight",
+          "bert.encoder.layer.8.attention.self.value.bias",
+          "bert.encoder.layer.8.attention.self.value.weight",
+          "bert.encoder.layer.8.intermediate.dense.bias",
+          "bert.encoder.layer.8.intermediate.dense.weight",
+          "bert.encoder.layer.8.output.LayerNorm.beta",
+          "bert.encoder.layer.8.output.LayerNorm.gamma",
+          "bert.encoder.layer.8.output.dense.bias",
+          "bert.encoder.layer.8.output.dense.weight",
+          "bert.encoder.layer.9.attention.output.LayerNorm.beta",
+          "bert.encoder.layer.9.attention.output.LayerNorm.gamma",
+          "bert.encoder.layer.9.attention.output.dense.bias",
+          "bert.encoder.layer.9.attention.output.dense.weight",
+          "bert.encoder.layer.9.attention.self.key.bias",
+          "bert.encoder.layer.9.attention.self.key.weight",
+          "bert.encoder.layer.9.attention.self.query.bias",
+          "bert.encoder.layer.9.attention.self.query.weight",
+          "bert.encoder.layer.9.attention.self.value.bias",
+          "bert.encoder.layer.9.attention.self.value.weight",
+          "bert.encoder.layer.9.intermediate.dense.bias",
+          "bert.encoder.layer.9.intermediate.dense.weight",
+          "bert.encoder.layer.9.output.LayerNorm.beta",
+          "bert.encoder.layer.9.output.LayerNorm.gamma",
+          "bert.encoder.layer.9.output.dense.bias",
+          "bert.encoder.layer.9.output.dense.weight",
+          "bert.pooler.dense.bias",
+          "bert.pooler.dense.weight",
+          "cls.predictions.bias",
+          "cls.predictions.transform.LayerNorm.beta",
+          "cls.predictions.transform.LayerNorm.gamma",
+          "cls.predictions.transform.dense.bias",
+          "cls.predictions.transform.dense.weight",
+          "cls.seq_relationship.bias",
+          "cls.seq_relationship.weight",
+          "embeddings.token_type_embeddings.weight"
+        ],
+        "qformer_config": {
+          "vocab_size": 30522,
+          "hidden_size": 768,
+          "num_hidden_layers": 6,
+          "num_attention_heads": 12,
+          "intermediate_size": 3072,
+          "encoder_hidden_size": 256,
+          "cross_attention_frequency": 2,
+          "hidden_act": "gelu",
+          "hidden_dropout_prob": 0.1,
+          "attention_probs_dropout_prob": 0.1,
+          "max_position_embeddings": 512,
+          "initializer_range": 0.02,
+          "layer_norm_eps": 1e-12,
+          "pad_token_id": 0,
+          "position_embedding_type": "absolute"
+        }
+      }
+    },
+    "zero_obj_protocol": {
+      "training": "teacher_only",
+      "evaluation": [
+        "teacher",
+        "generated"
+      ],
+      "generated_fallback": "zero_obj_no_gt",
+      "zero_obj_boundary": "llm_hidden_2560_pre_adapter",
+      "zero_obj_training": false
+    },
+    "decoder_text": "question_plus_answer_own_position_causal",
+    "point_encoder": {
+      "route": "official_ground3d_spconv_superpoint",
+      "voxel_size": 0.02,
+      "output_dim": 256,
+      "training_sampling": "all_superpoints",
+      "evaluation_sampling": "all_superpoints"
+    },
+    "teacher_forward": "single_causal_ce_and_full_text_hidden",
+    "generated_forward": "cached_generation_then_full_causal_replay",
+    "geometry": "ground3d_0.02m_voxel_mean_then_raw_point_superpoint_mean",
+    "decoder": {
+      "architecture": "objanc_qwen_univlg_full_cycle",
+      "visual_dim": 512,
+      "text_dim": 2048,
+      "hidden_dim": 256,
+      "num_queries": 50,
+      "num_layers": 9,
+      "num_heads": 8,
+      "feedforward_dim": 1024,
+      "dropout": 0.0,
+      "max_text_tokens": 384,
+      "attention_mask_threshold": 0.5,
+      "text_temperature": 0.07
+    },
+    "adapters": {
+      "text": [
+        2560,
+        2048
+      ],
+      "visual": [
+        256,
+        512
+      ]
+    },
+    "loss": {
+      "span_weight": 6.0,
+      "mask_bce_weight": 5.0,
+      "dice_weight": 2.0,
+      "focal_alpha": 0.25,
+      "focal_gamma": 2.0,
+      "aux_weight": 0.5
+    },
+    "matcher": {
+      "span_weight": 2.0,
+      "mask_bce_weight": 15.0,
+      "dice_weight": 6.0,
+      "span_pooling": "mean_sigmoid"
+    },
+    "ranking": {
+      "enabled": true,
+      "weight": 0.5,
+      "temperature": 0.1,
+      "scope": "all_valid_obj_anc",
+      "layer": "final_only",
+      "warmup_steps": 0
+    }
+  },
+  "base_manifest": {
+    "qwen": {
+      "repo_id": "Qwen/Qwen3-VL-4B-Instruct",
+      "revision": "ebb281ec70b05090aa6165b016eac8ec08e71b17",
+      "files": {
+        "README.md": {
+          "size": 7133,
+          "sha256": "a884e5e78f7d6f7bfe237f909dbc41a126542e259dc79d8ab33cc8980580ff79",
+          "official_lfs_sha256": null,
+          "official_git_blob_sha1": "542417095b66d3fc13be22bbf6722928787b8ef4"
+        },
+        "chat_template.json": {
+          "size": 5502,
+          "sha256": "6f8a6a55027e3da5160105556cda5dd69f6423f1c32645f6730d32de7773d0c4",
+          "official_lfs_sha256": null,
+          "official_git_blob_sha1": "e49e75bdda104c8de941eb20e0b3765184fb27bc"
+        },
+        "config.json": {
+          "size": 1505,
+          "sha256": "edac7703329133edfc53e46ac0081835144c99d7eebf28b71c732694d435224d",
+          "official_lfs_sha256": null,
+          "official_git_blob_sha1": "22be8bb79043d39840ca5e70d7a2dab80311602c"
+        },
+        "generation_config.json": {
+          "size": 269,
+          "sha256": "8469742d1fce0de951c8909b26a2c0c0d8490837ce476efb114da9e0cefc4d44",
+          "official_lfs_sha256": null,
+          "official_git_blob_sha1": "e116347d7ef42621c7a5957f82c015c38d939c1f"
+        },
+        "merges.txt": {
+          "size": 1671839,
+          "sha256": "599bab54075088774b1733fde865d5bd747cbcc7a547c5bc12610e874e26f5e3",
+          "official_lfs_sha256": null,
+          "official_git_blob_sha1": "20024bfe7c83998e9aeaf98a0cd6a2ce6306c2f0"
+        },
+        "model-00001-of-00002.safetensors": {
+          "size": 4967229296,
+          "sha256": "30a01a0556622645a3cce87b655bbbbbc1f170c196099f1b666c93202c3339a9",
+          "official_lfs_sha256": "30a01a0556622645a3cce87b655bbbbbc1f170c196099f1b666c93202c3339a9"
+        },
+        "model-00002-of-00002.safetensors": {
+          "size": 3908490048,
+          "sha256": "046296a2a387efb43b0c997d5833c789604d168834f6e0d3064bf7bb13d002a6",
+          "official_lfs_sha256": "046296a2a387efb43b0c997d5833c789604d168834f6e0d3064bf7bb13d002a6"
+        },
+        "model.safetensors.index.json": {
+          "size": 64742,
+          "sha256": "58a7841d7bff2548dd91577d216274a83cf1b500bc6a534b809d6c1b1707cf2b",
+          "official_lfs_sha256": null,
+          "official_git_blob_sha1": "3b52de97496e2f4501dfa92a87642f60db3e22a1"
+        },
+        "preprocessor_config.json": {
+          "size": 390,
+          "sha256": "27225450ac9c6529872ee1924fcb0962ff5634834f817040f444118116f4e516",
+          "official_lfs_sha256": null,
+          "official_git_blob_sha1": "2ea84a437d448ff71b08df68fdd949d5cc4ebb64"
+        },
+        "tokenizer.json": {
+          "size": 7032403,
+          "sha256": "a5d85b6dcc535e6b93115a9ef287e6132fdbf30270da6218194ba742261173c7",
+          "official_lfs_sha256": null,
+          "official_git_blob_sha1": "c6cc1014128b19d1fc46b1d30a23e3b1d35db421"
+        },
+        "tokenizer_config.json": {
+          "size": 10868,
+          "sha256": "c2da771801886ad9ae98181793ffd3dfb7f1af30f6f7c6a4e15d7dbba52e2399",
+          "official_lfs_sha256": null,
+          "official_git_blob_sha1": "d3d3763207692c78780f4bf42d4dadf49a5c8012"
+        },
+        "video_preprocessor_config.json": {
+          "size": 385,
+          "sha256": "7768af27c1fafa9cc9011c1dc20067e03f8915e03b63504550e11d5066986d13",
+          "official_lfs_sha256": null,
+          "official_git_blob_sha1": "3ba673a5ad7d4d13f54155ecd38b2a94a6dac8fe"
+        },
+        "vocab.json": {
+          "size": 2776833,
+          "sha256": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+          "official_lfs_sha256": null,
+          "official_git_blob_sha1": "4783fe10ac3adce15ac8f358ef5462739852c569"
+        }
+      }
+    },
+    "ground3d": {
+      "repo_id": "amolharsh/Ground3D-LMM-4B-3D",
+      "revision": "d9c1260cf945dae333fd87c994e734419e189f00",
+      "files": {
+        "README.md": {
+          "size": 1615,
+          "sha256": "9f8a2c124af35feb3095ee97dd89cb122b1bf4e85072d7847991a01e7e4e8c07",
+          "official_lfs_sha256": null,
+          "official_git_blob_sha1": "e329b2c84809e768f7ee8a6e3750a40aa2e1d997"
+        },
+        "pytorch_model.pth": {
+          "size": 11749751630,
+          "sha256": "cc7c379567b609d5e9dfc9001c8d6ec2ad1a252d99d3d38b6d1f27cd4f92bc69",
+          "official_lfs_sha256": "cc7c379567b609d5e9dfc9001c8d6ec2ad1a252d99d3d38b6d1f27cd4f92bc69"
+        }
+      }
+    }
+  },
+  "frozen_hash": "87be83a29f4fac3c072eb20d4b75ea247064daab957e1c5f7a8899ae99235ba9",
+  "source_path": "/home/huangxiang/codes/guiming/guiming_codes/research/Ground3D_objanc_teacher_forcing_scanrefer_interactor_4b_v1/outputs/scanrefer_teacher_forcing_univlg9/epoch_010_step_00045720.pt",
+  "sha256": "3b4a70ce794d9db32a1d3183b4d288420eed75c15188c489f9f9198659e6e0d3",
+  "source_config": {
+    "project": {
+      "authorized_code_root": "/home/huangxiang/codes/guiming",
+      "artifact_root": "/home/huangxiang/codes/guiming/guiming_codes/research/Ground3D_objanc_teacher_forcing_scanrefer_interactor_4b_v1",
+      "source_data_root": "/home/huangxiang/codes/guiming/guiming_codes/research/SpatialLM_compressed_visual_objanc_full_attention_v1",
+      "output_dir": "/home/huangxiang/codes/guiming/guiming_codes/research/Ground3D_objanc_teacher_forcing_scanrefer_interactor_4b_v1/outputs/scanrefer_teacher_forcing_univlg9",
+      "evaluation_dir": "/home/huangxiang/codes/guiming/guiming_codes/research/Ground3D_objanc_teacher_forcing_scanrefer_interactor_4b_v1/evaluations/scanrefer_teacher_forcing_univlg9",
+      "cache_dir": "/home/huangxiang/codes/guiming/guiming_codes/research/Ground3D_objanc_teacher_forcing_scanrefer_interactor_4b_v1/cache/huggingface"
+    },
+    "initialization": {
+      "mode": "official_ground3d_3d"
+    },
+    "model": {
+      "model_name_or_path": "/home/huangxiang/codes/guiming/guiming_codes/research/Ground3D_objanc_teacher_forcing_scanrefer_4b_v1/models/qwen3_vl_4b",
+      "ground3d_weights_dir": "/home/huangxiang/codes/guiming/guiming_codes/research/Ground3D_objanc_teacher_forcing_scanrefer_4b_v1/models/ground3d_3d",
+      "expected_hidden_size": 2560,
+      "expected_num_hidden_layers": 36,
+      "trust_remote_code": false,
+      "dtype": "bfloat16",
+      "gradient_checkpointing": true,
+      "enable_fourier_encode": false,
+      "attention_mode": "causal",
+      "system_prompt": "Answer the 3D grounding question briefly and naturally. Mark exactly one target noun phrase with <obj>...</obj>. Mark each useful reference instance with <anc>...</anc>. Do not nest tags.",
+      "point_prompt": "<|point|>",
+      "user_prefix": "Identify the requested object and any useful anchor objects: ",
+      "structured_tokens": [
+        "<obj>",
+        "</obj>",
+        "<anc>",
+        "</anc>"
+      ],
+      "lora": {
+        "r": 32,
+        "alpha": 64,
+        "dropout": 0.1,
+        "bias": "none",
+        "target_modules": [
+          "q_proj",
+          "k_proj",
+          "v_proj",
+          "o_proj",
+          "attn.qkv",
+          "attn.proj"
+        ]
+      },
+      "generation": {
+        "constrained": true,
+        "greedy": true,
+        "max_phrase_tokens": 32,
+        "max_new_tokens": 128
+      }
+    },
+    "point_encoder": {
+      "route": "official_ground3d_spconv_superpoint",
+      "voxel_size": 0.02,
+      "output_dim": 256,
+      "training_sampling": "all_superpoints",
+      "evaluation_sampling": "all_superpoints"
+    },
+    "decoder": {
+      "architecture": "objanc_qwen_univlg_full_cycle",
+      "visual_dim": 512,
+      "text_dim": 2048,
+      "hidden_dim": 256,
+      "num_queries": 50,
+      "num_layers": 9,
+      "num_heads": 8,
+      "feedforward_dim": 1024,
+      "dropout": 0.0,
+      "max_text_tokens": 384,
+      "attention_mask_threshold": 0.5,
+      "text_temperature": 0.07
+    },
+    "data": {
+      "sampling_mode": "full_dataset_no_replacement",
+      "expected_train_samples": 36569,
+      "train_sources": [
+        {
+          "name": "scanrefer",
+          "format": "scanents_json",
+          "annotations": "/home/huangxiang/codes/guiming/guiming_codes/research/SpatialLM_compressed_visual_objanc_full_attention_v1/data/objanc_teacher_answers_v1/scanrefer_train.json",
+          "sampling_weight": 1.0
+        }
+      ],
+      "val_annotations": "/home/huangxiang/codes/guiming/guiming_codes/research/SpatialLM_compressed_visual_objanc_full_attention_v1/data/objanc_teacher_answers_v1/scanrefer_val.json",
+      "scene_root": "/home/huangxiang/codes/guiming/guiming_codes/Reason3D_base/data/scannetv2",
+      "annotation_text_field": "description",
+      "scene_file_suffix": "refer",
+      "dataset_name": "scanrefer",
+      "tuple_fields": [
+        "xyz",
+        "rgb",
+        "superpoint_id",
+        "semantic_id",
+        "instance_id"
+      ],
+      "target_label_field": "instance_id",
+      "num_bins": 1280,
+      "world_extent_m": 32.0,
+      "loc_margin_m": 0.3,
+      "train_random_voxel_sample": false,
+      "seed": 42,
+      "num_workers": 2,
+      "batch_size": 1,
+      "normal": {
+        "enabled": false,
+        "cache_dir": "/home/huangxiang/codes/guiming/guiming_codes/research/SpatialLMsegqwen3d_v5/cache/scanrefer_normals",
+        "require_cache": false,
+        "radius": 0.1,
+        "max_nn": 30,
+        "version": "scipy-kdtree-cuda-pca-radius0.1-maxnn30-v1"
+      },
+      "superpoint": {
+        "enabled": true,
+        "cache_dir": "/home/huangxiang/codes/guiming/guiming_codes/research/SpatialLMseg_unet/cache/scanrefer_reason3d_superpoint",
+        "require_cache": true,
+        "version": "reason3d-knn-v1",
+        "graph_k": 8,
+        "normal_k": 20,
+        "edge_radius_scale": 3.0,
+        "k_thresh": 0.01,
+        "min_vertices": 20
+      }
+    },
+    "loss": {
+      "span_weight": 6.0,
+      "mask_bce_weight": 5.0,
+      "dice_weight": 2.0,
+      "focal_alpha": 0.25,
+      "focal_gamma": 2.0,
+      "aux_weight": 0.5
+    },
+    "matcher": {
+      "span_weight": 2.0,
+      "mask_bce_weight": 15.0,
+      "dice_weight": 6.0,
+      "span_pooling": "mean_sigmoid"
+    },
+    "ranking": {
+      "enabled": true,
+      "weight": 0.5,
+      "temperature": 0.1,
+      "scope": "all_valid_obj_anc",
+      "layer": "final_only",
+      "warmup_steps": 0
+    },
+    "answer_policy": {
+      "training": "teacher_only",
+      "evaluation": [
+        "teacher",
+        "generated"
+      ],
+      "generated_fallback": "zero_obj_no_gt",
+      "zero_obj_boundary": "llm_hidden_2560_pre_adapter",
+      "zero_obj_training": false
+    },
+    "training": {
+      "answer_pretrain_epochs": 3,
+      "objective": "ground3d_objanc_teacher_forcing_scanrefer_interactor_4b_v1",
+      "epochs": 20,
+      "answer_mode": "teacher",
+      "allow_generated_answers": false,
+      "qwen_lora_lr": 1e-05,
+      "structured_token_lr": 1e-05,
+      "visual_lr": 1e-05,
+      "adapter_lr": 0.0001,
+      "decoder_lr": 0.0001,
+      "answer_lm_weight": 0.1,
+      "weight_decay": 0.01,
+      "gradient_accumulation_steps": 2,
+      "cosine_min_lr_ratio": 0.1,
+      "max_grad_norm": 1.0,
+      "log_every": 100,
+      "save_every_epochs": 1,
+      "keep_all_checkpoints": 1,
+      "amp": true,
+      "seed": 42,
+      "interactor_lr": 0.0001
+    },
+    "validation": {
+      "mask_threshold": 0.5
+    },
+    "interactor": {
+      "text_input": false,
+      "num_queries": 32,
+      "language_hidden_size": 2560,
+      "asset_dir": "/home/huangxiang/codes/guiming/guiming_codes/research/SpatialLM_objanc_answer_only_causal_interactor_visual_only_scanrefer_05b_v1/models/bert-base-embedding"
+    }
+  },
+  "state_tensors": 1043
+}
