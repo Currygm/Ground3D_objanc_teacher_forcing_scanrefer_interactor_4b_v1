@@ -1,0 +1,41 @@
+{
+  "schema_version": 3,
+  "project_root": "/home/huangxiang/codes/guiming/guiming_codes/research/Ground3D_objanc_region_feedback_scanrefer_interactor_4b_v1",
+  "base_config": "/home/huangxiang/codes/guiming/guiming_codes/research/Ground3D_objanc_region_feedback_scanrefer_interactor_4b_v1/configs/scanrefer_teacher_forcing_univlg9.yaml",
+  "first_stage": {
+    "checkpoint": "/home/huangxiang/codes/guiming/guiming_codes/research/Ground3D_objanc_teacher_forcing_scanrefer_interactor_4b_v1/outputs/scanrefer_teacher_forcing_univlg9/epoch_015_step_00068580.pt",
+    "sha256": "e698d80f7956506af0f950cd20c8a006ce75e42cee9da686302016cd797a6786",
+    "generation_protocol": "unconstrained"
+  },
+  "feedback": {
+    "protocol": "object_evidence_shared_qwen_textscore_v3",
+    "stage": "a",
+    "method": "qwen_feedback",
+    "evidence_mode": "empty",
+    "input_dim": 256,
+    "hidden_dim": 256,
+    "language_dim": 2560,
+    "num_queries": 50,
+    "ranking_temperature": 0.1,
+    "ranking_weight": 0.5
+  },
+  "optimizer": {
+    "new_lr": 0.0001,
+    "qwen_lora_lr": 1e-05,
+    "weight_decay": 0.01
+  },
+  "training": {
+    "epochs": 5,
+    "batch_size": 1,
+    "num_workers": 2,
+    "gradient_accumulation_steps": 2,
+    "seed": 42,
+    "amp": true,
+    "max_grad_norm": 1,
+    "cosine_min_lr_ratio": 0.1,
+    "log_every": 100
+  },
+  "output_dir": "/home/huangxiang/codes/guiming/guiming_codes/research/Ground3D_objanc_region_feedback_scanrefer_interactor_4b_v1/outputs/feedback_a_empty_v3",
+  "evaluation_dir": "/home/huangxiang/codes/guiming/guiming_codes/research/Ground3D_objanc_region_feedback_scanrefer_interactor_4b_v1/evaluations/feedback_a_empty_v3",
+  "cache_dir": "/home/huangxiang/codes/guiming/guiming_codes/research/Ground3D_objanc_region_feedback_scanrefer_interactor_4b_v1/cache/first_stage_epoch015_objects_v3"
+}

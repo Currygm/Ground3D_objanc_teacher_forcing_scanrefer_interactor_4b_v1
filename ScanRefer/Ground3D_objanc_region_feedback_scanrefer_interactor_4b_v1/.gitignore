@@ -1,0 +1,24 @@
+models/
+outputs/
+evaluations/
+evaluations_standalone/
+cache/
+env/
+wheels/
+__pycache__/
+*.pyc
+.pytest_cache/
+.superpowers/
+
+/env
+/cache
+/outputs
+/models
+/logs
+/evaluations*
+
+# Local verification reports and logs are not part of the code distribution.
+/docs/
+
+# Local test scratch
+/.tmp/
