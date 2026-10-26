@@ -8,12 +8,13 @@ from runtime_helpers import atomic_save,sha256
 from .objects import select_object_evidence
 
 CACHE_PROTOCOL="fixed_objects_textscore_v3"
+FULL_CACHE_PROTOCOL="fixed_objects_full_scene_v4"
 
 def _cpu(value):
     return value.detach().cpu().clone()
 
 @torch.no_grad()
-def make_record(proposal,batch,row,language,*,index):
+def make_record(proposal,batch,row,language,*,index,include_full_scene=False):
     objects=select_object_evidence(proposal)
     question=batch["question"][row]
     ids=language.tokenizer.encode(question,add_special_tokens=False)
@@ -21,7 +22,7 @@ def make_record(proposal,batch,row,language,*,index):
     device=next(language.language.parameters()).device
     tokens=torch.tensor(ids,device=device,dtype=torch.long)
     question_mean=language.structured.embed(tokens,language.language.get_base_model().get_input_embeddings()).mean(0)
-    return {"protocol":CACHE_PROTOCOL,"index":int(index),"sample_id":str(batch["sample_id"][row]),
+    record={"protocol":FULL_CACHE_PROTOCOL if include_full_scene else CACHE_PROTOCOL,"index":int(index),"sample_id":str(batch["sample_id"][row]),
         "question":question,"answer":proposal.answer,"failed":bool(proposal.failed),
         "scene":_cpu(proposal.visual.hidden),"question_mean":_cpu(question_mean),
         "evidence":{"features":_cpu(objects.features),"roles":objects.roles,"phrases":objects.phrases,
@@ -31,9 +32,17 @@ def make_record(proposal,batch,row,language,*,index):
         "mapping":_cpu(proposal.point_to_superpoint).long(),
         # Labels live separately from inference evidence and are never used by predict().
         "truth":_cpu(batch["gt_point_masks"][row][0]).bool()}
+    if include_full_scene:
+        record.update(superpoint_features=_cpu(proposal.features),superpoint_xyz=_cpu(proposal.xyz),
+            supervision={"teacher_answer":str(batch["teacher_answer"][row]),
+                "answer_entity_indices":list(map(int,batch["answer_entity_indices"][row])),
+                "gt_point_masks":_cpu(batch["gt_point_masks"][row]).bool(),
+                "gt_superpoint_masks":_cpu(batch["gt_superpoint_masks"][row]).float()})
+    return record
 
-def validate_record(value,index=None):
-    if value.get("protocol")!=CACHE_PROTOCOL or (index is not None and value.get("index")!=index):
+def validate_record(value,index=None,*,require_full_scene=False):
+    expected=FULL_CACHE_PROTOCOL if require_full_scene else CACHE_PROTOCOL
+    if value.get("protocol")!=expected or (index is not None and value.get("index")!=index):
         raise ValueError("Wrong cache protocol/index")
     masks=value["masks"];scores=value["first_scores"];mapping=value["mapping"];truth=value["truth"]
     e=value["evidence"];k=len(e["roles"])
@@ -51,6 +60,22 @@ def validate_record(value,index=None):
         if not torch.isfinite(tensor).all():raise ValueError("Nonfinite cached evidence")
     if value["scene"].ndim!=2 or value["question_mean"].shape!=(value["scene"].shape[-1],):
         raise ValueError("Invalid cached language dimensions")
+    if require_full_scene:
+        from spatiallm_compressed_visual_objanc_full_attention.model.answer_format import parse_answer
+        f=value.get("superpoint_features");xyz=value.get("superpoint_xyz");sup=value.get("supervision",{})
+        if (not isinstance(f,torch.Tensor) or f.shape!=(masks.shape[1],e["features"].shape[1])
+            or not isinstance(xyz,torch.Tensor) or xyz.shape!=(masks.shape[1],3)
+            or not torch.isfinite(f).all() or not torch.isfinite(xyz).all()):
+            raise ValueError("Stage B requires aligned full-scene superpoint features/XYZ")
+        raw=sup.get("gt_point_masks");sp=sup.get("gt_superpoint_masks");indices=sup.get("answer_entity_indices")
+        parsed=parse_answer(sup.get("teacher_answer",""))
+        if (not parsed.valid or not isinstance(indices,list) or not indices or len(set(indices))!=len(indices)
+            or any(not isinstance(i,int) or i<0 or i>=len(parsed.entities) for i in indices)
+            or parsed.entities[indices[0]].role!="OBJ"
+            or not isinstance(raw,torch.Tensor) or raw.shape!=(len(indices),len(mapping))
+            or not isinstance(sp,torch.Tensor) or sp.shape!=(len(indices),masks.shape[1])
+            or not torch.isfinite(sp).all() or not torch.equal(raw[0].bool(),truth)):
+            raise ValueError("Stage B supervision/text/entity/mask alignment differs")
     return value
 
 def _atomic_json(path,value):
@@ -59,11 +84,12 @@ def _atomic_json(path,value):
     os.replace(tmp,path)
 
 class CacheWriter:
-    def __init__(self,root,split,identity,count,*,resume=False):
+    def __init__(self,root,split,identity,count,*,resume=False,full_scene=False):
         self.root=Path(root);self.split=split;self.identity=identity;self.count=int(count)
+        self.full_scene=bool(full_scene);self.protocol=FULL_CACHE_PROTOCOL if full_scene else CACHE_PROTOCOL
         if split not in {"train","val"} or self.count<1:raise ValueError("Invalid cache split/count")
         self.root.mkdir(parents=True,exist_ok=True)
-        metadata={"protocol":CACHE_PROTOCOL,"split":split,"identity":identity,"count":self.count}
+        metadata={"protocol":self.protocol,"split":split,"identity":identity,"count":self.count}
         draft=self.root/"draft.json"
         if draft.exists():
             if not resume:raise FileExistsError("Cache exists; use --resume to validate/reuse")
@@ -73,7 +99,7 @@ class CacheWriter:
 
     def write(self,index,value):
         if not 0<=index<self.count:raise ValueError("Cache index out of range")
-        validate_record(value,index)
+        validate_record(value,index,require_full_scene=self.full_scene)
         path=self.root/"records"/f"{index:08d}.pt"
         if path.exists():raise FileExistsError("Refusing to overwrite cache record")
         atomic_save(value,path)
@@ -85,7 +111,7 @@ class CacheWriter:
         proof=path.with_suffix(".checksum.json")
         if not proof.is_file() or json.loads(proof.read_text())!={"sha256":sha256(path),"index":index}:
             raise ValueError("Uncommitted or modified cache record checksum")
-        return validate_record(torch.load(path,map_location="cpu",weights_only=False),index)
+        return validate_record(torch.load(path,map_location="cpu",weights_only=False),index,require_full_scene=self.full_scene)
 
     def finalize(self):
         entries=[];ids=set()
@@ -97,19 +123,20 @@ class CacheWriter:
             ids.add(value["sample_id"])
             entries.append({"index":index,"sample_id":value["sample_id"],"file":str(path.relative_to(self.root)),
                 "sha256":sha256(path),"bytes":path.stat().st_size})
-        result={"protocol":CACHE_PROTOCOL,"split":self.split,"identity":self.identity,
+        result={"protocol":self.protocol,"split":self.split,"identity":self.identity,
                 "count":self.count,"entries":entries}
         _atomic_json(self.root/"manifest.json",result)
         return result
 
 class CachedDataset(Dataset):
-    def __init__(self,root,identity,*,expected_count,split):
-        self.root=Path(root)
+    def __init__(self,root,identity,*,expected_count,split,full_scene=False):
+        self.root=Path(root);self.full_scene=bool(full_scene)
+        protocol=FULL_CACHE_PROTOCOL if full_scene else CACHE_PROTOCOL
         manifest=self.root/"manifest.json"
         if not manifest.is_file():raise ValueError("Complete cache manifest is required")
         self.manifest=json.loads(manifest.read_text())
         m=self.manifest
-        if (m.get("protocol")!=CACHE_PROTOCOL or m.get("identity")!=identity or m.get("split")!=split
+        if (m.get("protocol")!=protocol or m.get("identity")!=identity or m.get("split")!=split
             or m.get("count")!=expected_count or len(m.get("entries",[]))!=expected_count):
             raise ValueError("First-stage cache source/split/count changed")
         if [x["index"] for x in m["entries"]]!=list(range(expected_count)):
@@ -123,6 +150,6 @@ class CachedDataset(Dataset):
         path=(self.root/entry["file"]).resolve(strict=True)
         if not path.is_relative_to(self.root.resolve()) or sha256(path)!=entry["sha256"]:
             raise ValueError("Cache record checksum/path changed")
-        value=validate_record(torch.load(path,map_location="cpu",weights_only=False),index)
+        value=validate_record(torch.load(path,map_location="cpu",weights_only=False),index,require_full_scene=self.full_scene)
         if value["sample_id"]!=entry["sample_id"]:raise ValueError("Cache sample identity changed")
         return value

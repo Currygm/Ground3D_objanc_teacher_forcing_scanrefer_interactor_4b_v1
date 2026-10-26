@@ -37,6 +37,7 @@ def cache_main():
     if args.max_cache_gib<=0:parser.error("max-cache-gib must be positive")
     config=load_feedback_config(args.config);identity=provenance(config)
     source_identity=cache_identity(config,identity)
+    full_scene=config.get("cache_mode")=="full_scene_v4"
     base=load_segmentation_config(config["base_config"])
     dataset=build_segmentation_dataset(base,args.split)
     expected=36569 if args.split=="train" else 9483
@@ -47,9 +48,9 @@ def cache_main():
     device=explicit_device()
     if world>1:dist.init_process_group("gloo",timeout=timedelta(hours=2))
     try:
-        if rank==0:writer=CacheWriter(root,args.split,source_identity,count,resume=args.resume)
+        if rank==0:writer=CacheWriter(root,args.split,source_identity,count,resume=args.resume,full_scene=full_scene)
         if world>1:dist.barrier()
-        if rank:writer=CacheWriter(root,args.split,source_identity,count,resume=True)
+        if rank:writer=CacheWriter(root,args.split,source_identity,count,resume=True,full_scene=full_scene)
         # Never load feedback weights here. Original checkpoint remains pinned.
         first=build_first_stage(config,identity).to(device).eval()
         seed=int(config["training"]["seed"]);budget_checked=False
@@ -70,7 +71,7 @@ def cache_main():
             batch=collate_samples([item])
             with torch.no_grad(),torch.autocast("cuda",dtype=torch.bfloat16,enabled=bool(config["training"]["amp"])):
                 proposal=first.predict(batch)[0]
-                value=make_record(proposal,batch,0,first.model.answer_lm,index=index)
+                value=make_record(proposal,batch,0,first.model.answer_lm,index=index,include_full_scene=full_scene)
             if not budget_checked:
                 buffer=io.BytesIO();torch.save(value,buffer);sample_bytes=buffer.tell()
                 remaining=count-len(list((root/"records").glob("*.pt")))

@@ -1,4 +1,4 @@
-# Ground3D Interactor: shared-Qwen object feedback, Stage A v3
+# Ground3D Interactor: shared-Qwen object feedback, Stage A v3 / Stage B v4
 
 The first pass supplies one visual descriptor per actually predicted OBJ/ANC,
 rather than one token per decoder query. Stage A retains all 50 masks for scoring.
@@ -9,8 +9,9 @@ Both passes reuse the original Qwen; there is no copied student Qwen.
 1. Load the pinned original Interactor epoch015 checkpoint, freeze it, and cache
    first-pass train/val outputs in a deterministic per-sample coordinate frame.
 2. Release that model. Initialize the second pass from the same original checkpoint.
-   Train only its existing language LoRA and object projection; no new scoring head.
-   Qwen base weights, task token rows and visual components remain frozen.
+   Stage A trains only its existing language LoRA and object projection; no new scoring head.
+   Stage B additionally trains the original text/visual adapters and full UniVLG9 decoder.
+   Qwen base weights, task token rows, SpConv and Interactor remain frozen.
 3. Training/evaluation read the original first-pass cache. Updated LoRA must never
    regenerate the supposedly fixed first-pass candidates.
 
@@ -34,8 +35,9 @@ No new classifier is introduced. The original nine query/visual update layers ar
 not rerun: that would change the candidate representations and masks. This reuses
 the original scoring formula and text projection parameters, not the complete
 original decoder text-update computation. LoRA learns through this frozen interface.
-The oracle and every mask are asserted unchanged at evaluation. Stage B and the
-old visual_geometry config are disabled. Old checkpoints cannot load into v3.
+The oracle and every mask are asserted unchanged for Stage A evaluation. Stage B
+uses configs/feedback_b_visual.yaml and is described below; legacy visual_geometry
+configs remain disabled. Old all-query checkpoints cannot load into this reader.
 
 ## Environment
 
@@ -144,8 +146,94 @@ For later uncached deployment, sequentially load original LoRA for the first pas
 then feedback LoRA for the second pass, in one model instance. The current entrypoints
 use the offline-cache protocol; an adapter-switching deployment API is not implemented.
 
-Final verification: 136 CPU tests passed; metadata/CLI/syntax checks passed.
+Previous Stage A delivery: 136 CPU tests passed; metadata/CLI/syntax checks passed.
 Independent final review was attempted but could not complete due reviewer usage
 limits. Author self-review found/fixed the empty-control replay text leak with a
 RED/GREEN regression and reran the full suite. This is not independent approval.
 See docs/verification.json for evidence and exact unvalidated hardware paths.
+
+
+## Stage B: full second-pass mask refinement
+
+The same object-evidence prefix is reused with an English instruction requiring
+one <obj> target phrase and optional <anc> reference phrases. Training uses the
+teacher answer ONLY as second-pass completion/segmentation supervision; first-pass
+answer and region evidence always remain generated predictions. Evaluation generates
+the second answer with raw greedy decoding, then replays that actual answer through
+Qwen and runs the complete original nine-layer UniVLG9. It selects new masks using
+the original mean-sigmoid OBJ phrase scores. No copied Qwen or new scoring head exists.
+
+Stage B trains existing languageLoRA (1e-5), object projection (1e-4), original
+text/visual adapters (1e-4), and original full decoder (1e-4). Qwen base, task-token
+rows, SpConv and Interactor stay frozen. Default5epochs, BF16, batch/rank1,
+accumulation2, AdamW weight decay0.01, cosine to0.1, seed42, gradient clipping1.
+
+The loss reuses original Hungarian assignment and span/BCE/Dice weights6/5/2,
+auxiliary weight0.5 (nine auxiliary predictions), final ranking weight0.5/temp0.1,
+and second-answer CE weight0.1. Original filtered OBJ/ANC mask supervision is retained.
+
+### Stage B caches
+
+The lightweight Stage A cache cannot supply full decoding inputs. Stage B uses a
+separate full-scene v4 cache: all original [S,256] superpoint features, [S,3] coordinates,
+first-pass predictions and separately stored teacher/entity/point/SP supervision,
+all from the same coordinate frame. Do not reuse or overwrite A cache manifests.
+The generator reports a pilot disk estimate and checks the per-split budget (default200GiB).
+
+~~~bash
+CONFIG=configs/feedback_b_visual.yaml GPU_IDS=0 bash scripts/cache_first_stage.sh --split train
+CONFIG=configs/feedback_b_visual.yaml GPU_IDS=0 bash scripts/cache_first_stage.sh --split val
+~~~
+
+Use --resume after interruption. Full caches live under
+cache/first_stage_epoch015_objects_full_v4/. Hardware acceptance subsets need a
+separate copied config/cache_dir and --max-samples; formal training requires all36569/9483.
+
+### Stage B training and resume
+
+Choose exactly ONE initialization. Recommended, if a trained Stage A reader exists:
+
+~~~bash
+CONFIG=configs/feedback_b_visual.yaml GPU_IDS=0 bash scripts/train_feedback.sh \
+  --stage-a-checkpoint outputs/feedback_a_visual_v3/latest.pt
+~~~
+
+Alternatively, explicitly initialize everything from the pinned original checkpoint:
+
+~~~bash
+CONFIG=configs/feedback_b_visual.yaml GPU_IDS=0 bash scripts/train_feedback.sh --from-first-stage
+~~~
+
+Resume a B run (including original parent provenance):
+
+~~~bash
+CONFIG=configs/feedback_b_visual.yaml GPU_IDS=0 bash scripts/train_feedback.sh \
+  --resume outputs/feedback_b_visual_v4/latest.pt
+~~~
+
+A->B import transfers only complete languageLoRA/object-projection state, keeps the
+original decoder/adapters initialization, and validates original source/data,
+first-pass implementation, preprocessing seed, tokenizer and reader dimensions.
+Training code and A/B cache manifest equality are intentionally not required for
+cross-stage transfer; strict B resume still requires exact config/code/data/cache identity.
+
+### Stage B evaluation
+
+~~~bash
+CONFIG=configs/feedback_b_visual.yaml GPU_IDS=0 bash scripts/evaluate_feedback.sh \
+  outputs/feedback_b_visual_v4/latest.pt --output-dir evaluations/stage_b_visual_v4_final
+~~~
+
+Output directory must be new. Predictions contain the actual SECOND answer and
+separate first answer. First/main/strict scores retain full denominators; invalid
+second answers use synthetic zeroOBJ, with strict failure-zeroed metrics and no GT
+fallback. A failed first pass does not automatically fail a valid second pass.
+Stage B permits new candidate masks/oracle; reports oracle_iou_delta,
+newly_covered50 and lost_coverage50 relative to the immutable first-pass cache.
+The original Stage A mask/oracle invariance assertion remains active only for A.
+
+Current implementation verification: 151 CPU tests passed; independent final review found no Important/Critical defects,
+including real tiny Qwen/UniVLG9, full decoder and LoRA/adapter gradients, generated
+inference without supervision, padding/teacher CE, cache alignment and A->B handoff.
+No formal cache, training, full4B/CUDA/SpConv/DDP/memory acceptance or GitHub publication
+has been performed for this Stage B revision. Source original experiment/data/env remain read-only.

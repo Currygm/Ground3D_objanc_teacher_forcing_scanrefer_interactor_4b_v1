@@ -21,7 +21,7 @@ from spatiallm_compressed_visual_objanc_full_attention.config import ensure_with
 from .config import load_feedback_config
 from .factory import provenance,cache_identity,build_model
 from .cache import CachedDataset
-from .checkpoint import save_checkpoint,load_checkpoint
+from .checkpoint import save_checkpoint,load_checkpoint,import_stage_a
 from .metrics import candidate_metrics,zero_metrics,summarize
 
 def collate_cached(rows):return rows
@@ -54,18 +54,38 @@ def load_cache(config,identity,split,*,max_samples=None):
             if actual!=count:
                 if actual!=max_samples:raise ValueError("Partial cache requires matching --max-samples")
                 count=actual
-    return CachedDataset(root,cache_identity(config,identity),expected_count=count,split=split)
+    return CachedDataset(root,cache_identity(config,identity),expected_count=count,split=split,
+                         full_scene=config.get("cache_mode")=="full_scene_v4")
 
 def training_identity(config,identity,datasets):
     return {**identity,"cache_manifests":{split:ds.manifest_sha256 for split,ds in datasets.items()}}
 
+def validate_initialization(stage,*,resume=None,stage_a_checkpoint=None,from_first_stage=False):
+    if stage=="a":
+        if stage_a_checkpoint or from_first_stage:raise ValueError("Stage A cannot use Stage B initialization flags")
+    elif stage=="b":
+        if sum(bool(x) for x in [resume,stage_a_checkpoint,from_first_stage])!=1:
+            raise ValueError("Stage B requires exactly one of --stage-a-checkpoint, --from-first-stage or --resume")
+    else:raise ValueError("Unknown training stage")
+
+def validate_candidate_contract(stage,masks,first_masks,main,first):
+    if masks.shape!=first_masks.shape:raise RuntimeError("Candidate masks no longer align with the cached scene")
+    if stage=="a" and (not torch.equal(masks,first_masks) or main["oracle_iou"]!=first["oracle_iou"]):
+        raise RuntimeError("Stage A changed fixed candidate masks/oracle")
+    if stage not in {"a","b"}:raise RuntimeError("Unknown evaluation stage")
+
 def train_main():
     from .runtime import explicit_device
-    parser=argparse.ArgumentParser(description="Stage A: cached object evidence and shared Qwen language LoRA")
+    parser=argparse.ArgumentParser(description="Stage A/B: cached object evidence and shared Qwen language LoRA")
     parser.add_argument("config",type=Path)
     parser.add_argument("--resume",type=Path)
+    parser.add_argument("--stage-a-checkpoint",type=Path)
+    parser.add_argument("--from-first-stage",action="store_true")
     parser.add_argument("--output-dir",type=Path)
     args=parser.parse_args();config=load_feedback_config(args.config)
+    try:validate_initialization(config["feedback"]["stage"],resume=args.resume,
+        stage_a_checkpoint=args.stage_a_checkpoint,from_first_stage=args.from_first_stage)
+    except ValueError as error:parser.error(str(error))
     if args.output_dir:
         config["output_dir"]=str(ensure_within(args.output_dir,config["project_root"],must_exist=False))
     identity=provenance(config)
@@ -81,6 +101,9 @@ def train_main():
     seed=int(config["training"]["seed"])
     random.seed(seed+rank);np.random.seed(seed+rank);torch.manual_seed(seed+rank)
     model=build_model(config,identity).to(device).train()
+    if args.stage_a_checkpoint:
+        parent=ensure_within(args.stage_a_checkpoint,config["project_root"],must_exist=True)
+        import_stage_a(model,parent,identity)
     _,initial=cached_loader(cached["train"],config,"train",rank,world)
     accumulation=int(config["training"]["gradient_accumulation_steps"])
     total=math.ceil(len(initial)/accumulation)*int(config["training"]["epochs"]);del initial
@@ -152,14 +175,14 @@ def baseline_result(records,device):
 
 def evaluate_main():
     from .runtime import explicit_device
-    parser=argparse.ArgumentParser(description="Evaluate fixed-candidate object-feedback Stage A")
+    parser=argparse.ArgumentParser(description="Evaluate object-feedback Stage A/B with generated second-pass predictions")
     parser.add_argument("config",type=Path);parser.add_argument("checkpoint",type=Path,nargs="?")
     parser.add_argument("--baseline",action="store_true")
     parser.add_argument("--output-dir",type=Path,required=True)
     parser.add_argument("--max-samples",type=int)
     parser.add_argument("--run-id",default=os.getenv("FEEDBACK_RUN_ID"))
     args=parser.parse_args()
-    if args.baseline==bool(args.checkpoint):parser.error("Choose --baseline or a Stage A checkpoint")
+    if args.baseline==bool(args.checkpoint):parser.error("Choose --baseline or a feedback checkpoint")
     config=load_feedback_config(args.config)
     identity=provenance(config);val=load_cache(config,identity,"val",max_samples=args.max_samples)
     # A checkpoint binds both split manifests, so full training cache is required
@@ -196,13 +219,12 @@ def evaluate_main():
             for i,item in enumerate(items):
                 main=candidate_metrics(result["scores"][i],result["masks"][i],item["mapping"],item["truth"])
                 first=candidate_metrics(result["first_scores"][i],result["first_masks"][i],item["mapping"],item["truth"])
-                if (not torch.equal(result["masks"][i],result["first_masks"][i])
-                    or main["oracle_iou"]!=first["oracle_iou"]):
-                    raise RuntimeError("Stage A changed fixed candidate masks/oracle")
+                validate_candidate_contract(config["feedback"]["stage"],result["masks"][i],
+                                            result["first_masks"][i],main,first)
                 e=item["evidence"]
                 records.append({"sample_id":item["sample_id"],"index":item["index"],"main":main,"first":first,
                     "strict":zero_metrics(main) if result["failed"][i] else main,"failed":result["failed"][i],
-                    "first_failed":item["failed"],"answer":item["answer"],"first_answer":item["answer"],
+                    "first_failed":item["failed"],"answer":result["answers"][i],"first_answer":item["answer"],
                     "prefix_length":result["prefix_lengths"][i],
                     "objects":[{"role":role,"phrase":phrase,"source_query":int(q),"valid":bool(v)}
                         for role,phrase,q,v in zip(e["roles"],e["phrases"],e["source_query_ids"],e["valid_mask"])]})
@@ -218,6 +240,10 @@ def evaluate_main():
             raise ValueError("Evaluation sample coverage/uniqueness mismatch")
         summary={**summarize(records),"config":config,"provenance":identity,
             "checkpoint":str(args.checkpoint) if args.checkpoint else None,"baseline":args.baseline,
+            "stage":config["feedback"]["stage"],"stage_a_parent":getattr(model,"_stage_a_parent",None),
+            "oracle_iou_delta":sum(r["main"]["oracle_iou"]-r["first"]["oracle_iou"] for r in records)/len(records),
+            "newly_covered50":sum(r["first"]["oracle_iou"]<.5<=r["main"]["oracle_iou"] for r in records)/len(records),
+            "lost_coverage50":sum(r["main"]["oracle_iou"]<.5<=r["first"]["oracle_iou"] for r in records)/len(records),
             "teacher_fallbacks":0,"gt_used_in_prediction":False,
             "first_failure_rate":sum(r["first_failed"] for r in records)/len(records),
             "rank_runtime":[{k:v for k,v in s.items() if k!="records"} for s in shards]}

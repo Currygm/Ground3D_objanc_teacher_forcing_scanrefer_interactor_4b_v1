@@ -12,6 +12,7 @@ def main():
     root=Path(__file__).resolve().parents[1]
     configs=[load_feedback_config(root/"configs"/("feedback_a_"+mode+".yaml"))
              for mode in ["empty","text","visual","selector"]]
+    configs.append(load_feedback_config(root/"configs/feedback_b_visual.yaml"))
     for name in ["feedback_a_visual_geometry.yaml","feedback_b_visual_geometry.yaml"]:
         try:load_feedback_config(root/"configs"/name)
         except ValueError:pass
@@ -33,9 +34,11 @@ def main():
         counts[name]=len(value["annotations"] if isinstance(value,dict) else value)
     if counts!={"train":36569,"val":9483}:raise ValueError("Unexpected annotation counts")
     print(json.dumps({"metadata_preflight_only":True,"full_4b_model_constructed":False,"gpu_executed":False,
-        "protocol":"object_evidence_shared_qwen_textscore_v3","active_configs":4,"legacy_configs_rejected":2,
+        "protocol":"object_evidence_shared_qwen_textscore_v3","active_configs":len(configs),"legacy_configs_rejected":2,
         "first_stage_sha256":identity["first_sha"],"first_stage_completed_epochs":checkpoint["completed_epochs"],
         "annotation_samples":counts,
         "cache_manifests_present":{s:(Path(configs[0]["cache_dir"])/s/"manifest.json").is_file()
+                                   for s in ["train","val"]},
+        "stage_b_cache_manifests_present":{s:(Path(configs[-1]["cache_dir"])/s/"manifest.json").is_file()
                                    for s in ["train","val"]}},indent=2))
 if __name__=="__main__":main()

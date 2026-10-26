@@ -41,6 +41,11 @@ def build_first_stage(config,identity=None):
 
 def build_model(config,identity=None):
     first=build_first_stage(config,identity)
+    if config["feedback"]["stage"]=="b":
+        from .stage_b import StageBFeedbackModel
+        return StageBFeedbackModel(first.model.answer_lm,config,decoder=first.model.decoder,
+            text_adapter=first.model.text_adapter,visual_adapter=first.model.visual_adapter,
+            objective_config=first.model.config)
     return FeedbackModel(first.model.answer_lm,config,text_adapter=first.model.text_adapter,decoder=first.model.decoder)
 
 
@@ -53,6 +58,6 @@ def cache_identity(config,identity=None):
     # Only code on the first-pass path belongs to immutable cache identity.
     relevant={k:v for k,v in relevant.items() if k not in {"train_feedback.py","evaluate_feedback.py"}}
     return {"first_sha":identity["first_sha"],"data":identity["data"],"base_config":identity["base_config"],
-            "implementation":relevant,"protocol":"fixed_objects_textscore_v3","coordinate_policy":"seed_per_sample_v2",
+            "implementation":relevant,"protocol":"fixed_objects_full_scene_v4" if config.get("cache_mode")=="full_scene_v4" else "fixed_objects_textscore_v3","coordinate_policy":"seed_per_sample_v2",
             "generation_protocol":identity.get("generation_protocol"),
             "cache_seed":int(config.get("training",{}).get("seed",42))}

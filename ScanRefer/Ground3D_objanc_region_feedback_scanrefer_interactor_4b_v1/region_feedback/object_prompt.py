@@ -7,8 +7,15 @@ SYSTEM_PROMPT=("You are performing a second-pass 3D grounding assessment. Use th
 "The first-pass prediction is a hypothesis and may be incorrect. Check the target description and its spatial "
 "relations to the predicted anchors. Do not assume that the first-pass target is correct.")
 PROMPT_PROTOCOL="english_object_evidence_textscore_v3"
+SEGMENTATION_PROMPT_PROTOCOL="english_object_evidence_segmentation_v4"
+SEGMENTATION_SYSTEM_PROMPT=SYSTEM_PROMPT+(
+    " Respond briefly and naturally. Mark exactly one target noun phrase with <obj>...</obj>. "
+    "Mark each useful reference instance with <anc>...</anc>. Do not nest tags. "
+    "Describe the target requested by the original query, even when the first-pass prediction is wrong.")
 
-def render_object_prompt(language,record,projection,mode):
+def render_object_prompt(language,record,projection,mode,*,task="ranking"):
+    if task not in {"ranking","segmentation"}:raise ValueError("Unknown feedback task")
+    system=SEGMENTATION_SYSTEM_PROMPT if task=="segmentation" else SYSTEM_PROMPT
     if mode not in {"empty","text","visual"}:raise ValueError("Unknown object evidence mode")
     device=next(language.language.parameters()).device
     dtype=language.language.get_base_model().get_input_embeddings().weight.dtype
@@ -45,11 +52,13 @@ def render_object_prompt(language,record,projection,mode):
         else:text("Visual evidence is unavailable for this predicted object.\n")
         text("\n")
     question_left=length+len("Original query:\n")
-    text("Original query:\n"+record["question"]+
-         "\n\nAssess which instance best satisfies the original query using the supplied evidence.\n")
+    instruction=("Respond with the target and useful anchors using the required <obj> and <anc> tags."
+                 if task=="segmentation" else
+                 "Assess which instance best satisfies the original query using the supplied evidence.")
+    text("Original query:\n"+record["question"]+"\n\n"+instruction+"\n")
     user="".join(chunks)
     rendered=language.tokenizer.apply_chat_template(
-        [{"role":"system","content":SYSTEM_PROMPT},{"role":"user","content":user}],
+        [{"role":"system","content":system},{"role":"user","content":user}],
         tokenize=False,add_generation_prompt=True)
     start=rendered.rfind(user)
     if start<0:raise ValueError("Chat template lost evidence content")
@@ -77,7 +86,8 @@ def render_object_prompt(language,record,projection,mode):
         blocks.extend([embeddings[cursor:index],value]);cursor=index
     blocks.append(embeddings[cursor:])
     merged=torch.cat(blocks)
-    return merged,{"visual_slots":slots,"user_text":user,"prompt_protocol":PROMPT_PROTOCOL,"question_indices":mapped_qi}
+    return merged,{"visual_slots":slots,"user_text":user,"prompt_protocol":SEGMENTATION_PROMPT_PROTOCOL if task=="segmentation" else PROMPT_PROTOCOL,
+        "system_text":system,"question_indices":mapped_qi}
 
 def object_prompt_hidden(language,records,projection,mode):
     rendered=[render_object_prompt(language,r,projection,mode) for r in records]

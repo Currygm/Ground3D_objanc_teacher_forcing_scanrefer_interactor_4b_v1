@@ -9,8 +9,8 @@ PROJECT=Path(__file__).resolve().parents[1]
 def load_feedback_config(path):
     config=yaml.safe_load(Path(path).read_text(encoding="utf-8"))
     if not isinstance(config,dict):raise ValueError("Unsupported feedback configuration")
-    if config.get("feedback",{}).get("stage")=="b":
-        raise ValueError("Stage B is disabled; object-feedback v3 currently supports Stage A only")
+    if config.get("feedback",{}).get("stage")=="b" and config.get("schema_version")!=3:
+        raise ValueError("Stage B legacy visual_geometry config is disabled; use feedback_b_visual.yaml")
     if config.get("schema_version")!=3 or config.get("feedback",{}).get("protocol")!=PROTOCOL:
         raise ValueError("Legacy all-query configuration is disabled; choose feedback_a_visual.yaml")
     root=Path(config["project_root"]).resolve(strict=True)
@@ -25,9 +25,18 @@ def load_feedback_config(path):
     cfg=config["feedback"]
     if (cfg["input_dim"],cfg["language_dim"],cfg["num_queries"],cfg["hidden_dim"])!=(256,2560,50,256):
         raise ValueError("Wrong Ground3D object dimensions")
-    if cfg["stage"]!="a" or cfg["evidence_mode"] not in {"empty","text","visual"} or cfg["method"] not in {"qwen_feedback","selector"}:
+    if cfg["stage"] not in {"a","b"} or cfg["evidence_mode"] not in {"empty","text","visual"} or cfg["method"] not in {"qwen_feedback","selector"}:
         raise ValueError("Wrong Stage A control")
     if cfg["method"]=="selector" and cfg["evidence_mode"]!="visual":raise ValueError("Selector uses visual evidence")
+    if cfg["stage"]=="b":
+        if cfg["method"]!="qwen_feedback" or config.get("cache_mode")!="full_scene_v4":
+            raise ValueError("Stage B requires qwen_feedback and full_scene_v4 cache")
+        if cfg.get("answer_lm_weight",0)<=0 or int(cfg.get("max_new_tokens",0))<1:
+            raise ValueError("Stage B requires answer CE weight and a positive generation budget")
+        if any(float(config["optimizer"].get(k,0))<=0 for k in ["decoder_lr","adapter_lr"]):
+            raise ValueError("Stage B decoder/adapter learning rates must be positive")
+    elif config.get("cache_mode","objects_v3")!="objects_v3":
+        raise ValueError("Stage A requires the lightweight objects_v3 cache")
     if cfg["ranking_temperature"]<=0 or cfg["ranking_weight"]<=0:raise ValueError("Invalid ranking loss")
     for key in ["output_dir","evaluation_dir","cache_dir"]:
         config[key]=str(ensure_within(config[key],root,must_exist=False))
