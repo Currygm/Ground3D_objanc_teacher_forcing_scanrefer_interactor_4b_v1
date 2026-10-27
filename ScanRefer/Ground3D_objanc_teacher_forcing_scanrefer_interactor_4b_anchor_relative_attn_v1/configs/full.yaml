@@ -1,0 +1,181 @@
+project:
+  authorized_code_root: /home/huangxiang/codes/hx_l
+  artifact_root: /home/huangxiang/codes/hx_l/code/research/Ground3D_objanc_teacher_forcing_scanrefer_interactor_4b_anchor_relative_attn_v1
+  source_data_root: /home/huangxiang/codes/hx_l/code/research/SpatialLM_compressed_visual_objanc_full_attention_v1
+  output_dir: /home/huangxiang/codes/hx_l/code/research/Ground3D_objanc_teacher_forcing_scanrefer_interactor_4b_anchor_relative_attn_v1/outputs/full
+  evaluation_dir: /home/huangxiang/codes/hx_l/code/research/Ground3D_objanc_teacher_forcing_scanrefer_interactor_4b_anchor_relative_attn_v1/evaluations/full
+  cache_dir: /home/huangxiang/codes/hx_l/code/research/Ground3D_objanc_teacher_forcing_scanrefer_interactor_4b_anchor_relative_attn_v1/cache/huggingface
+initialization:
+  mode: official_ground3d_3d
+model:
+  model_name_or_path: /home/huangxiang/codes/guiming/guiming_codes/research/Ground3D_objanc_teacher_forcing_scanrefer_4b_v1/models/qwen3_vl_4b
+  ground3d_weights_dir: /home/huangxiang/codes/guiming/guiming_codes/research/Ground3D_objanc_teacher_forcing_scanrefer_4b_v1/models/ground3d_3d
+  expected_hidden_size: 2560
+  expected_num_hidden_layers: 36
+  trust_remote_code: false
+  dtype: bfloat16
+  gradient_checkpointing: true
+  enable_fourier_encode: false
+  attention_mode: causal
+  system_prompt: Answer the 3D grounding question briefly and naturally. Mark exactly
+    one target noun phrase with <obj>...</obj>. Mark each useful reference instance
+    with <anc>...</anc>. Do not nest tags.
+  point_prompt: <|point|>
+  user_prefix: 'Identify the requested object and any useful anchor objects: '
+  structured_tokens:
+  - <obj>
+  - </obj>
+  - <anc>
+  - </anc>
+  lora:
+    r: 32
+    alpha: 64
+    dropout: 0.1
+    bias: none
+    target_modules:
+    - q_proj
+    - k_proj
+    - v_proj
+    - o_proj
+    - attn.qkv
+    - attn.proj
+  generation:
+    constrained: false
+    greedy: true
+    max_phrase_tokens: 32
+    max_new_tokens: 128
+point_encoder:
+  route: official_ground3d_spconv_superpoint
+  voxel_size: 0.02
+  output_dim: 256
+  training_sampling: all_superpoints
+  evaluation_sampling: all_superpoints
+decoder:
+  architecture: objanc_qwen_univlg_full_cycle
+  visual_dim: 512
+  text_dim: 2048
+  hidden_dim: 256
+  num_queries: 50
+  num_layers: 9
+  num_heads: 8
+  feedforward_dim: 1024
+  dropout: 0.0
+  max_text_tokens: 384
+  attention_mask_threshold: 0.5
+  text_temperature: 0.07
+data:
+  sampling_mode: full_dataset_no_replacement
+  expected_train_samples: 36569
+  train_sources:
+  - name: scanrefer
+    format: scanents_json
+    annotations: /home/huangxiang/codes/hx_l/code/research/SpatialLM_compressed_visual_objanc_full_attention_v1/data/objanc_teacher_answers_v1/scanrefer_train.json
+    sampling_weight: 1.0
+  val_annotations: /home/huangxiang/codes/hx_l/code/research/SpatialLM_compressed_visual_objanc_full_attention_v1/data/objanc_teacher_answers_v1/scanrefer_val.json
+  scene_root: /home/huangxiang/codes/hx_l/code/Reason3D_base/data/scannetv2
+  annotation_text_field: description
+  scene_file_suffix: refer
+  dataset_name: scanrefer
+  tuple_fields:
+  - xyz
+  - rgb
+  - superpoint_id
+  - semantic_id
+  - instance_id
+  target_label_field: instance_id
+  num_bins: 1280
+  world_extent_m: 32.0
+  loc_margin_m: 0.3
+  train_random_voxel_sample: false
+  seed: 42
+  num_workers: 2
+  batch_size: 1
+  normal:
+    enabled: false
+    cache_dir: /home/huangxiang/codes/hx_l/code/research/SpatialLMsegqwen3d_v5/cache/scanrefer_normals
+    require_cache: false
+    radius: 0.1
+    max_nn: 30
+    version: scipy-kdtree-cuda-pca-radius0.1-maxnn30-v1
+  superpoint:
+    enabled: true
+    cache_dir: /home/huangxiang/codes/hx_l/code/research/SpatialLMseg_unet/cache/scanrefer_reason3d_superpoint
+    require_cache: true
+    version: reason3d-knn-v1
+    graph_k: 8
+    normal_k: 20
+    edge_radius_scale: 3.0
+    k_thresh: 0.01
+    min_vertices: 20
+  expected_val_samples: 9483
+loss:
+  span_weight: 6.0
+  mask_bce_weight: 5.0
+  dice_weight: 2.0
+  focal_alpha: 0.25
+  focal_gamma: 2.0
+  aux_weight: 0.5
+matcher:
+  span_weight: 2.0
+  mask_bce_weight: 15.0
+  dice_weight: 6.0
+  span_pooling: mean_sigmoid
+ranking:
+  enabled: true
+  weight: 0.5
+  temperature: 0.1
+  scope: all_valid_obj_anc
+  layer: final_only
+  warmup_steps: 0
+answer_policy:
+  training: teacher_only
+  evaluation:
+  - teacher
+  - generated
+  generated_fallback: zero_obj_no_gt
+  zero_obj_boundary: llm_hidden_2560_pre_adapter
+  zero_obj_training: false
+training:
+  answer_pretrain_epochs: 3
+  objective: ground3d_objanc_teacher_forcing_scanrefer_interactor_4b_v1
+  epochs: 20
+  answer_mode: teacher
+  allow_generated_answers: false
+  qwen_lora_lr: 0.0001
+  structured_token_lr: 1.0e-05
+  visual_lr: 1.0e-05
+  adapter_lr: 0.0001
+  decoder_lr: 0.0001
+  answer_lm_weight: 0.1
+  weight_decay: 0.01
+  gradient_accumulation_steps: 2
+  cosine_min_lr_ratio: 0.1
+  max_grad_norm: 1.0
+  log_every: 100
+  save_every_epochs: 1
+  keep_all_checkpoints: 1
+  amp: true
+  seed: 42
+  interactor_lr: 0.0001
+  qwen_schedule: answer_linear_joint_cosine_v1
+validation:
+  mask_threshold: 0.5
+interactor:
+  text_input: false
+  num_queries: 32
+  language_hidden_size: 2560
+  asset_dir: /home/huangxiang/codes/guiming/guiming_codes/research/SpatialLM_objanc_answer_only_causal_interactor_visual_only_scanrefer_05b_v1/models/bert-base-embedding
+run: full
+anchor_relative_attention:
+  layers:
+  - 8
+  - 9
+  semantic_enabled: true
+  geometry_enabled: true
+  scalar_init: 0
+  scalar_bound: tanh
+  candidate_chunk: 8
+  visual_chunk: 1024
+  numerical_eps: 1.0e-06
+  geometry_mask_detach: true
+  stats_dtype: float32
